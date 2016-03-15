@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+% \pagestyle{empty}
+
+\setlength{\oddsidemargin}{-0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.9 in}
+\setlength{\textwidth}{7.0 in}
+\setlength{\textheight}{9.0 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0.3 in}
+\setlength{\parskip}{0.1 in}
+\usepackage{epsf}
+\usepackage{pseudocode}
+\usepackage{listings}
+\usepackage{amsmath}
+
+% \usepackage{times}
+% \usepackage{mathptm}
+
+\def\O{\mathop{\smash{O}}\nolimits}
+\def\o{\mathop{\smash{o}}\nolimits}
+\newcommand{\e}{{\rm e}}
+\newcommand{\R}{{\bf R}}
+\newcommand{\Z}{{\bf Z}}
+
+\begin{document}
+Programming Assignment 2 Ben Anandappa and Christi Balaki \newline
+
+\textbf{Part 1}
+\begin{itemize}
+\item In standard matrix multiplication, multiplying two $n x n$ matrices by each other has the following costs:
+\begin{itemize}
+\item Multiplication: $n^3$ steps
+\item Addition: $(n-1)n^2$ steps
+\end{itemize}
+Together, the total cost of the standard algorithm is $n^3 + (n-1)n^2 = (2n - 1)n^2$ 
+\item In Strassen's method, we can calculate the total cost by first calculating the costs of $P_1$ to $P_7$ as described in the lecture notes and the costs of the additions/subtractions of these products. 
+
+From the notes, we have the submatrices A, B, C, D, E, F, G, H which are of size n/2 and the following 7 products: 
+\begin{itemize}
+\item $P_1 = A(F-H)$
+\item $P_2 = (A+B)H$
+\item $P_3 = (C+D)E$
+\item $P_4 = D(G-E)$
+\item $P_5 = (A+D)(E+H)$
+\item $P_6 = (B-D)(G+H)$
+\item $P_7 = (A-C)(E+F)$
+\end{itemize} 
+
+of which we can use to make: 
+\begin{itemize}
+\item $AE + BG = P_5 + P_4 - P_2 + P_6$
+\item $AF + BH = P_1 + P_2$
+\item $CE + DG = P_3 + P_4$
+\item $CF + DH = P_5 + P_1 - P_3 - P_7$
+\end{itemize}
+
+For a $n*n$ matrix, the cost C(n) can be
+
+Note that the cost of $P_1$, $P_2$, $P_3$ and $P_4$ are the same ad
+
+ \end{itemize}
+\end{document}
+
+
+
+
+
