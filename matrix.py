@@ -1,4 +1,4 @@
-CROSS_OVER = 0 
+CROSS_OVER = 1
 
 #prints out a matrix
 def printMatrix(matrix):
@@ -17,19 +17,11 @@ def matrixProduct(X, Y):
 
 #Helper functions
 def add(X, Y):
-    n = len(X)
-    C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
-    for i in xrange(0, n):
-        for j in xrange(0, n):
-            C[i][j] = X[i][j] + Y[i][j]
+    C = [[X[i][j] + Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
     return C
 
 def subtract(X, Y):
-    n = len(X)
-    C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
-    for i in xrange(0, n):
-        for j in xrange(0, n):
-            C[i][j] = X[i][j] - Y[i][j]
+    C = [[X[i][j] - Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
     return C
 
 #Strassen Algorithm 
@@ -52,14 +44,6 @@ def strassenAlg(X, Y):
         F = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         G = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         H = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
-        printMatrix(A)
-        printMatrix(B)
-        printMatrix(C)
-        printMatrix(D)
-        printMatrix(E)
-        printMatrix(F)
-        printMatrix(G)
-        printMatrix(H)
         # dividing the matrices in 4 sub-matrices:
         for i in xrange(0, half_n):
             for j in xrange(0, half_n):
@@ -75,6 +59,7 @@ def strassenAlg(X, Y):
 
         temp1 = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         temp2 = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
+        printMatrix(A)
 
         # Calculating p1 to p7:
         temp1 = subtract(F, H)
@@ -102,19 +87,19 @@ def strassenAlg(X, Y):
         p7 = strassenAlg(temp1, temp2)        # p7 = (A - C)(E + F)
 
         # calculating submatrices of C
-        AE_plus_BG = subtract(add(add(p1, p4), p7), p5) 
-        AF_plus_BH = add(p3, p5) 
-        CE_plus_DG = add(p2, p4)  
-        CF_plus_DH = subtract(add(add(p1, p3), p6), p2)
+        AE_plus_BG = subtract(add(add(p5, p4), p6), p2) 
+        AF_plus_BH = add(p1, p2) 
+        CE_plus_DG = add(p3, p4)  
+        CF_plus_DH = subtract(add(add(p5, p1), p7), p3)
  
-        # Grouping the results obtained in a single matrix:
+        # Grouping the results obtained in a single matrix: 
         C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
         for i in xrange(0, half_n):
             for j in xrange(0, half_n):
                 C[i][j] = AE_plus_BG[i][j]
                 C[i][j + half_n] = AF_plus_BH[i][j]
                 C[i + half_n][j] = CE_plus_DG[i][j]
-                C[i + half_n][j + half_n] = CF_plus_DH[i][j]
+                C[i + half_n][j + half_n] = CF_plus_DH[i][j] 
         return C
 
 A = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]
