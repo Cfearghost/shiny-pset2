@@ -1,11 +1,9 @@
+from optparse import OptionParser
+from math import ceil, log
+
 CROSS_OVER = 1
 
-#prints out a matrix
-def printMatrix(matrix):
-    for line in matrix:
-        print "\t".join(map(str,line))
-
-#standard matrix multiplication 
+# standard matrix multiplication 
 def matrixProduct(X, Y):
     n = len(X)
     C = [[0 for i in xrange(n)] for j in xrange(n)]
@@ -15,7 +13,7 @@ def matrixProduct(X, Y):
                 C[i][j] += X[i][k] * Y[k][j]
     return C
 
-#Helper functions
+# Helper functions
 def add(X, Y):
     C = [[X[i][j] + Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
     return C
@@ -24,15 +22,15 @@ def subtract(X, Y):
     C = [[X[i][j] - Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
     return C
 
-#Strassen Algorithm 
+# Strassen Algorithm 
 def strassenAlg(X, Y):
     n = len(X)
-
     if n <= CROSS_OVER:
         return matrixProduct(X, Y)
-    else:
+    elif n % 2 == 0:
         # dimesnion of submatrices
         half_n = n/2
+
         # initialize sub-matrices of X
         A = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         B = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
@@ -44,47 +42,28 @@ def strassenAlg(X, Y):
         F = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         G = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
         H = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
+
         # dividing the matrices in 4 sub-matrices:
         for i in xrange(0, half_n):
             for j in xrange(0, half_n):
-                A[i][j] = X[i][j]                   # top left
-                B[i][j] = X[i][j + half_n]           # top right
-                C[i][j] = X[i + half_n][j]           # bottom left
-                D[i][j] = X[i + half_n][j + half_n]   # bottom right
+                A[i][j] = X[i][j]                      # top left
+                B[i][j] = X[i][j + half_n]             # top right
+                C[i][j] = X[i + half_n][j]             # bottom left
+                D[i][j] = X[i + half_n][j + half_n]    # bottom right
  
-                E[i][j] = Y[i][j]                   # top left
-                F[i][j] = Y[i][j + half_n]           # top right
-                G[i][j] = Y[i + half_n][j]           # bottom left
-                H[i][j] = Y[i + half_n][j + half_n]   # bottom right
-
-        temp1 = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
-        temp2 = [[0 for j in xrange(0, half_n)] for i in xrange(0, half_n)]
-        printMatrix(A)
+                E[i][j] = Y[i][j]                      # top left
+                F[i][j] = Y[i][j + half_n]             # top right
+                G[i][j] = Y[i + half_n][j]             # bottom left
+                H[i][j] = Y[i + half_n][j + half_n]    # bottom right
 
         # Calculating p1 to p7:
-        temp1 = subtract(F, H)
-        p1 = strassenAlg(A, temp1)            # p1 = A(F - H)
- 
-        temp1 = add(A, B)     
-        p2 = strassenAlg(temp1, H)            # p2 = (A + B)H
- 
-        temp1 = add(C, D) 
-        p3 = strassenAlg(temp1, E)            # p3 = (C + D)E
- 
-        temp1 = subtract(G, E) 
-        p4 = strassenAlg(D, temp1)            # p4 = D(G-E)
- 
-        temp1 = add(A, D) 
-        temp2 = add(E, H)      
-        p5 = strassenAlg(temp1, temp2)        # p5 = (A + D)(E + H)
- 
-        temp1 = subtract(B, D) 
-        temp2 = add(G, H)      
-        p6 = strassenAlg(temp1, temp2)        # p6 = (B - D)(G + H)
-
-        temp1 = subtract(A, C) 
-        temp2 = add(E, F)      
-        p7 = strassenAlg(temp1, temp2)        # p7 = (A - C)(E + F)
+        p1 = strassenAlg(A, subtract(F, H))            # p1 = A(F - H)
+        p2 = strassenAlg(add(A, B), H)                 # p2 = (A + B)H
+        p3 = strassenAlg(add(C, D), E)                 # p3 = (C + D)E
+        p4 = strassenAlg(D, subtract(G, E))            # p4 = D(G-E)
+        p5 = strassenAlg(add(A, D), add(E, H))         # p5 = (A + D)(E + H)  
+        p6 = strassenAlg(subtract(B, D),  add(G, H))   # p6 = (B - D)(G + H)
+        p7 = strassenAlg(subtract(A, C), add(E, F))    # p7 = (A - C)(E + F)
 
         # calculating submatrices of C
         AE_plus_BG = subtract(add(add(p5, p4), p6), p2) 
@@ -101,8 +80,50 @@ def strassenAlg(X, Y):
                 C[i + half_n][j] = CE_plus_DG[i][j]
                 C[i + half_n][j + half_n] = CF_plus_DH[i][j] 
         return C
+    else:
+        EvenX = [[0 for i in xrange(n+1)] for j in xrange(n+1)]
+        EvenY = [[0 for i in xrange(n+1)] for j in xrange(n+1)]
+        for i in xrange(n):
+            for j in xrange(n):
+                EvenX[i][j] = X[i][j]
+                EvenY[i][j] = Y[i][j]
+        EvenC = strassenAlg(EvenX, EvenY)
+        C = [[0 for i in xrange(n)] for j in xrange(n)]
+        for i in xrange(n):
+            for j in xrange(n):
+                C[i][j] = EvenC[i][j]
+        return C
 
-A = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]
-B = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]
+
+# Implementation that takes into account matrix dimension
+# If we can get strassenAlg working above, we don't need this
+def strassenImp(A, B):
+    nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
+    n = len(A)
+    m = nextPowerOfTwo(n)
+    APrep = [[0 for i in xrange(m)] for j in xrange(m)]
+    BPrep = [[0 for i in xrange(m)] for j in xrange(m)]
+    for i in xrange(n):
+        for j in xrange(n):
+            APrep[i][j] = A[i][j]
+            BPrep[i][j] = B[i][j]
+    CPrep = strassenAlg(APrep, BPrep)
+    C = [[0 for i in xrange(n)] for j in xrange(n)]
+    for i in xrange(n):
+        for j in xrange(n):
+            C[i][j] = CPrep[i][j]
+    return C
+
+# prints out a matrix
+def printMatrix(matrix):
+    for line in matrix:
+        print "\t".join(map(str,line))
+
+A = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
+B = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
 C = strassenAlg(A, B)
+printMatrix(C)
+C = strassenImp(A, B)
+printMatrix(C)
+C = matrixProduct(A, B)
 printMatrix(C)
