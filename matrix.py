@@ -100,7 +100,6 @@ def printMatrix(matrix):
 
 A = [[1 for j in xrange(0, 5)] for i in xrange(0, 5)]
 B = [[1 for j in xrange(0, 5)] for i in xrange(0, 5)]
-
 C = strassenAlg(A, B)
 printMatrix(C)
 
