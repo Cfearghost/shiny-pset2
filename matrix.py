@@ -94,36 +94,12 @@ def strassenAlg(X, Y):
                 C[i][j] = EvenC[i][j]
         return C
 
-
-# Implementation that takes into account matrix dimension
-# If we can get strassenAlg working above, we don't need this
-def strassenImp(A, B):
-    nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
-    n = len(A)
-    m = nextPowerOfTwo(n)
-    APrep = [[0 for i in xrange(m)] for j in xrange(m)]
-    BPrep = [[0 for i in xrange(m)] for j in xrange(m)]
-    for i in xrange(n):
-        for j in xrange(n):
-            APrep[i][j] = A[i][j]
-            BPrep[i][j] = B[i][j]
-    CPrep = strassenAlg(APrep, BPrep)
-    C = [[0 for i in xrange(n)] for j in xrange(n)]
-    for i in xrange(n):
-        for j in xrange(n):
-            C[i][j] = CPrep[i][j]
-    return C
-
 # prints out a matrix
 def printMatrix(matrix):
     for line in matrix:
         print "\t".join(map(str,line))
 
-A = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
-B = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
+A = [[1 for j in xrange(0, 1024)] for i in xrange(0, 1024)]
+B = [[1 for j in xrange(0, 1024)] for i in xrange(0, 1024)]
 C = strassenAlg(A, B)
-printMatrix(C)
-C = strassenImp(A, B)
-printMatrix(C)
-C = matrixProduct(A, B)
 printMatrix(C)
