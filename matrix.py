@@ -63,7 +63,7 @@ def strassenAlg(X, Y):
         p4 = strassenAlg(D, subtract(G, E))            # p4 = D(G-E)
         p5 = strassenAlg(add(A, D), add(E, H))         # p5 = (A + D)(E + H)  
         p6 = strassenAlg(subtract(B, D),  add(G, H))   # p6 = (B - D)(G + H)
-        p7 = strassenAlg(subtract(A, C), add(E, F))    # p7 = (A - C)(E + F)
+        p7 = strassenAlg(subtract(C, A), add(E, F))    # p7 = (A - C)(E + F)
 
         # calculating submatrices of C
         AE_plus_BG = subtract(add(add(p5, p4), p6), p2) 

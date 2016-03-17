@@ -152,9 +152,7 @@ def strassen(A, B):
             C[i][j] = CPrep[i][j]
     return C
 
-A = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
-B = [[1,2,3,4],[1,2,5,6],[1,5,7,5],[1,5,7,5]]
+A = [[1 for j in xrange(0, 1024)] for i in xrange(0, 1024)]
+B = [[1 for j in xrange(0, 1024)] for i in xrange(0, 1024)]
 C = strassen(A, B)
-printMatrix(C)
-C = ikjMatrixProduct(A, B)
 printMatrix(C)
