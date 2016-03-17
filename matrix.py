@@ -3,6 +3,7 @@ from math import ceil, log
 
 CROSS_OVER = 1
 
+#hello christi
 # standard matrix multiplication 
 def matrixProduct(X, Y):
     n = len(X)
