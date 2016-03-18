@@ -292,8 +292,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 4;
-    if (n == 4){
+    int n = 500;
+    if (n == 500){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
@@ -309,7 +309,7 @@ int main(){
         // Calculate the time 
         float time = ((float)t)/CLOCKS_PER_SEC;
         printf("%f seconds \n", time); 
-        printMatrixHeap(n, C);
+        //printMatrixHeap(n, C);
     }
     else if (n == 3){
         int** A = makeMatrix(n);
