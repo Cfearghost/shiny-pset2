@@ -4,25 +4,38 @@
 #define CROSS_OVER 1
 
 // standard matrix multiplication 
-int matrixProduct(int A[n][n], int B[n][n]) {
-   int size = n; 
-   int C[n][n]
+int** matrixProduct(int n, int A[n][n], int B[n][n]) {
+   int C[n][n];
    for (int i = 0; i < n; i++){
        for (int j = 0; j < n; j++){
            int sum = 0;
-           for (k = 0; k < n; k++){
+           for (int k = 0; k < n; k++){
                sum = sum + A[i][k]*B[k][j];
            }
            C[i][j] = sum;
        }
    }
-   return C
+   return C;
 }
 
 int main(){
-
-
-    return 0
+    int n = 10;
+    int A[n][n];
+    int B[n][n];
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            A[i][j] = 1;
+            B[i][j] = 1; 
+        }
+    }
+    int C = matrixProduct(n, A, B);
+    for(int i = 0; i < n; i++){
+        printf("\n");
+        for(int j = 0; j < n; j++){
+            printf("%d\t",C[i][j]);
+        }
+    }
+    return 0;
 }
 
 /*
