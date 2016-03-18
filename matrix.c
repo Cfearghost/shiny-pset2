@@ -87,9 +87,7 @@ void printMatrixStack(int n, int A[n][n]){
 }
 
 int** add(int n, int** X, int** Y){ 
-    int** C = NULL;
-    int** allocated_memory = (int**) malloc(1*n*n * sizeof(int));
-    C = makeMatrix2(C, allocated_memory, n, 0, n*n);;
+    int** C = makeMatrix(n);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          C[i][j] = X[i][j] + Y[i][j];
@@ -97,15 +95,35 @@ int** add(int n, int** X, int** Y){
 }
 
 int** subtract(int n, int** X, int** Y){ 
-    int** C = NULL;
-    int** allocated_memory = (int**) malloc(1*n*n * sizeof(int));
-    C = makeMatrix2(C, allocated_memory, n, 0, n*n);;
+    int** C = makeMatrix(n);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          C[i][j] = X[i][j] - Y[i][j];
     return C;
 }
 
+
+int** add2(int n, int id, int** X, int** Y){ 
+    int** C = NULL;
+    int sz = n*n;
+    int** allocated_memory = (int**) malloc(2*sz* sizeof(int));
+    C = makeMatrix2(C, allocated_memory, n, id, sz);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+         C[i][j] = X[i][j] + Y[i][j];
+    return C;
+}
+
+int** subtract2(int n, int id, int** X, int** Y){ 
+    int** C = NULL;
+    int sz = n*n;
+    int** allocated_memory = (int**) malloc(1*n*n * sizeof(int));
+    C = makeMatrix2(C, allocated_memory, n, id, sz);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+         C[i][j] = X[i][j] - Y[i][j];
+    return C;
+}
 
 // Strassen Algorithm 
 int** strassenAlg(int n, int** X, int** Y) {
@@ -165,25 +183,25 @@ int** strassenAlg(int n, int** X, int** Y) {
         }
 
         // Calculating p1 to p7:
-        int** p1;
+        int** p1 = NULL;
         p1 = makeMatrix2(p1, allocated_memory, half_n, 8, matrix_size);
 
-        int** p2;
+        int** p2 = NULL;
         p2 = makeMatrix2(p2, allocated_memory, half_n, 9, matrix_size);
 
-        int** p3;
+        int** p3 = NULL;
         p3 = makeMatrix2(p3, allocated_memory, half_n, 10, matrix_size);
 
-        int** p4;
+        int** p4 = NULL;
         p4 = makeMatrix2(p4, allocated_memory, half_n, 11, matrix_size);
 
-        int** p5;
+        int** p5 = NULL;
         p5 = makeMatrix2(p5, allocated_memory, half_n, 12, matrix_size);
 
-        int** p6;
+        int** p6 = NULL;
         p6 = makeMatrix2(p6, allocated_memory, half_n, 13, matrix_size);
 
-        int** p7;
+        int** p7 = NULL;
         p7 = makeMatrix2(p7, allocated_memory, half_n, 14, matrix_size);
         
         p1 = strassenAlg(half_n, A, subtract(half_n, F, H));          //p1 = A(F - H)
@@ -195,13 +213,13 @@ int** strassenAlg(int n, int** X, int** Y) {
         p7 = strassenAlg(half_n, subtract(half_n, C, A), add(half_n, E, F));    //p7 = (A - C)(E + F)
 
         // calculating submatrices of C       
-        int** AE_plus_BG;
+        int** AE_plus_BG = NULL;
         AE_plus_BG = makeMatrix2(AE_plus_BG, allocated_memory, half_n, 15, matrix_size);
-        int** AF_plus_BH;
+        int** AF_plus_BH = NULL;
         AF_plus_BH = makeMatrix2(AF_plus_BH, allocated_memory, half_n, 16, matrix_size);
-        int** CE_plus_DG;
+        int** CE_plus_DG = NULL;
         CE_plus_DG = makeMatrix2(CE_plus_DG, allocated_memory, half_n, 17, matrix_size);
-        int** CF_plus_DH;
+        int** CF_plus_DH = NULL;
         CF_plus_DH = makeMatrix2(CF_plus_DH, allocated_memory, half_n, 18, matrix_size);
         
         AE_plus_BG = subtract(half_n, add(half_n, add(half_n, p5, p4), p6), p2); 
