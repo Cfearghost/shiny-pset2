@@ -30,9 +30,15 @@ void printMatrix(int n, int A[n][n]){
 }
 
 int main(){
-    int n = 1000;
+    int n = 1024;
     int A[n][n];
     int B[n][n];
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+                        A[i][j] = 0;
+            B[i][j] = 0;
+        }
+    }
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
             A[i][j] = 1;
