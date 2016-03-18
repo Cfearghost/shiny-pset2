@@ -1,3 +1,4 @@
+import time
 from optparse import OptionParser
 from math import ceil, log
 
@@ -21,7 +22,9 @@ def add(X, Y):
 
 def subtract(X, Y):
     C = [[X[i][j] - Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
-
+    return C
+    
+    
 # Strassen Algorithm 
 def strassenAlg(X, Y):
     n = len(X)
@@ -99,10 +102,27 @@ def printMatrix(matrix):
     for line in matrix:
         print "\t".join(map(str,line))
 
-A = [[1 for j in xrange(0, 5)] for i in xrange(0, 5)]
-B = [[1 for j in xrange(0, 5)] for i in xrange(0, 5)]
-C = strassenAlg(A, B)
-printMatrix(C)
+variable = []
+count = 500
+flag = 0
+while (count < 700):
+    A = [[1 for j in xrange(0, count)] for i in xrange(0, count)]
+    B = [[1 for j in xrange(0, count)] for i in xrange(0, count)]
+    start = time.time()
+    C = strassenAlg(A, B)
+    end = time.time()
+    t1 = (end - start)
+    start = time.time()
+    D = matrixProduct(A,B)
+    end = time.time()
+    t2 = (end - start)
+    variable.append((t1, t2, count))
+    count = count + 1
+    if t1 < t2 and flag < 1:
+        flag = 2
+        print "cross:%d" % count
+
+
 
 
 
