@@ -286,8 +286,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 5;
-    if (n == 5){
+    int n = 6;
+    if (n == 6){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
