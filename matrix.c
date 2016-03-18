@@ -4,22 +4,33 @@
 #define CROSS_OVER 1
 
 // standard matrix multiplication 
-int** matrixProduct(int n, int A[n][n], int B[n][n]) {
-   int C[n][n];
+void matrixProduct(int n, int A[n][n], int B[n][n]) {
+   int sums[n];
    for (int i = 0; i < n; i++){
        for (int j = 0; j < n; j++){
            int sum = 0;
            for (int k = 0; k < n; k++){
                sum = sum + A[i][k]*B[k][j];
            }
-           C[i][j] = sum;
+           sums[j] = sum;
+       }
+       for (int x = 0; x < n; x++){
+           A[i][x] = sums[x];
        }
    }
-   return C;
+}
+
+void printMatrix(int n, int A[n][n]){
+    for(int i = 0; i < n; i++){
+        printf("\n");
+        for(int j = 0; j < n; j++){
+            printf("%d\t",A[i][j]);
+        }
+    }
 }
 
 int main(){
-    int n = 10;
+    int n = 1000;
     int A[n][n];
     int B[n][n];
     for (int i = 0; i < n; i++){
@@ -28,13 +39,13 @@ int main(){
             B[i][j] = 1; 
         }
     }
-    int C = matrixProduct(n, A, B);
-    for(int i = 0; i < n; i++){
-        printf("\n");
-        for(int j = 0; j < n; j++){
-            printf("%d\t",C[i][j]);
-        }
-    }
+    clock_t t = clock();
+    matrixProduct(n, A, B);
+    t = clock() - t; 
+    // Calculate the time 
+    float time = ((float)t)/CLOCKS_PER_SEC;
+    printf("%f seconds \n", time);
+   //printMatrix(n, A);
     return 0;
 }
 
