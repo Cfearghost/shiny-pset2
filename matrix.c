@@ -29,6 +29,21 @@ void matrixProductHeap(int n, int** A, int** B) {
    }
 }
 
+int** matrixProductHeap2(int n, int** A, int** B) {
+   int** C = makeMatrix(n);
+   int sum = 0; 
+   for (int i = 0; i < n; i++){
+       for (int j = 0; j < n; j++){
+           sum = 0;
+           for (int k = 0; k < n; k++){
+               sum = sum + A[i][k]*B[k][j];
+           }
+           C[i][j] = sum;
+       }
+   }
+   return C;
+}
+
 void matrixProductStack(int n, int A[n][n], int B[n][n]) {
    int sums[n];
    for (int i = 0; i < n; i++){
@@ -84,8 +99,9 @@ int** subtract(int n, int** X, int** Y){
 // Strassen Algorithm 
 int** strassenAlg(int n, int** X, int** Y) {
     if (n <= CROSS_OVER){
-        matrixProductHeap(n, X, Y);
-        return X;
+        int** C = makeMatrix(n);
+        C = matrixProductHeap2(n, X, Y);
+        return C;
     }
     else if (n % 2 == 0){
         // dimesnion of submatrices
@@ -108,7 +124,8 @@ int** strassenAlg(int n, int** X, int** Y) {
              A[i][j] = 0;
              B[i][j] = 0;
              C[i][j] = 0;
-             D[i][j] = 0; 
+             D[i][j] = 0;
+ 
              E[i][j] = 0;
              F[i][j] = 0;
              G[i][j] = 0;
@@ -225,7 +242,7 @@ int** strassenAlg(int n, int** X, int** Y) {
         return C1;
     }
     
-    else {
+    else { 
         int** EvenX = makeMatrix(n+1);
         int** EvenY = makeMatrix(n+1);
         
@@ -248,8 +265,7 @@ int** strassenAlg(int n, int** X, int** Y) {
         int** C = makeMatrix(n);
          for (int i = 0; i < n; i++)
           for (int j = 0; j < n; j++){
-             X[i][j] = 0;
-             Y[i][j] = 0;
+             C[i][j] = 0;
           }
           
         for (int i = 0; i < n; i++){
@@ -294,7 +310,23 @@ int main(){
         float time = ((float)t)/CLOCKS_PER_SEC;
         printf("%f seconds \n", time); 
         printMatrixHeap(n, C);
-    }/*
+    }
+    else if (n == 3){
+        int** A = makeMatrix(n);
+        int** B = makeMatrix(n);
+        int** C = makeMatrix(n);
+        for (int i = 0; i < n; i++)
+          for (int j = 0; j < n; j++){
+             A[i][j] = 1;
+             B[i][j] = 1;
+             C[i][j] = 0;
+          }
+        
+        C = matrixProductHeap2(n, A, B);
+        // Calculate the time 
+        printMatrixHeap(n, C);
+    }
+    /*
     else if (n < 1024){
         int A[n][n];
         int B[n][n];
