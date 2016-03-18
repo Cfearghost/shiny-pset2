@@ -25,11 +25,17 @@ int main(){
     return 0
 }
 
-/*
+
 # Helper functions
-def add(X, Y):
-    C = [[X[i][j] + Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
-    return C
+int add(X, Y, n){}  
+    int C[n][n] = malloc(sizeof(int)*n**2)
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            [X[i][j] + Y[i][j] 
+        }
+    }
+
+}
 
 def subtract(X, Y):
     C = [[X[i][j] - Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
