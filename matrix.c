@@ -4,8 +4,16 @@
 
 #define CROSS_OVER 1
 
+// Makes matrix on the heap
+int** makeMatrix(int n){
+    int **C = (int **)malloc(n * sizeof(int *));
+    for (int i=0; i<n; i++)
+         C[i] = (int *)malloc(n * sizeof(int));
+    return C;
+}
+
 // standard matrix multiplication 
-void matrixProduct(int n, int** A, int** B) {
+void matrixProductHeap(int n, int** A, int** B) {
    int sums[n];
    for (int i = 0; i < n; i++){
        for (int j = 0; j < n; j++){
@@ -21,7 +29,23 @@ void matrixProduct(int n, int** A, int** B) {
    }
 }
 
-void printMatrix(int n, int** A){
+void matrixProductStack(int n, int A[n][n], int B[n][n]) {
+   int sums[n];
+   for (int i = 0; i < n; i++){
+       for (int j = 0; j < n; j++){
+           int sum = 0;
+           for (int k = 0; k < n; k++){
+               sum = sum + A[i][k]*B[k][j];
+           }
+           sums[j] = sum;
+       }
+       for (int x = 0; x < n; x++){
+           A[i][x] = sums[x];
+       }
+   }
+}
+
+void printMatrixHeap(int n, int** A){
     for(int i = 0; i < n; i++){
         printf("\n");
         for(int j = 0; j < n; j++){
@@ -30,11 +54,13 @@ void printMatrix(int n, int** A){
     }
 }
 
-int** makeMatrix(int n){
-    int **C = (int **)malloc(n * sizeof(int *));
-    for (int i=0; i<n; i++)
-         C[i] = (int *)malloc(n * sizeof(int));
-    return C;
+void printMatrixStack(int n, int A[n][n]){
+    for(int i = 0; i < n; i++){
+        printf("\n");
+        for(int j = 0; j < n; j++){
+            printf("%d\t",A[i][j]);
+        }
+    }
 }
 
 int** add(int n, int** X, int** Y){ 
@@ -54,26 +80,47 @@ int** subtract(int n, int** X, int** Y){
     return C;
 }
 
+
 int main(){
-    int n = 1024;
-    int** A = makeMatrix(n);
-    int** B = makeMatrix(n);
+    int n = 1023;
 
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++){
-         A[i][j] = 1;
-         B[i][j] = 1;
-      }
-    
-    clock_t t = clock();
-    matrixProduct(n, A, B);
-    t = clock() - t; 
-    // Calculate the time 
-    float time = ((float)t)/CLOCKS_PER_SEC;
-    printf("%f seconds \n", time); 
+    if (n < 1024){
+        int A[n][n];
+        int B[n][n];
 
-    printMatrix(n, A);
+        for (int i = 0; i < n; i++)
+          for (int j = 0; j < n; j++){
+             A[i][j] = 1;
+             B[i][j] = 1;
+          }
+        
+        clock_t t = clock();
+        matrixProductStack(n, A, B);
+        t = clock() - t; 
+        // Calculate the time 
+        float time = ((float)t)/CLOCKS_PER_SEC;
+        printf("%f seconds \n", time); 
 
+       // printMatrixStack(n, A);
+    } else {
+        int** A = makeMatrix(n);
+        int** B = makeMatrix(n);
+
+        for (int i = 0; i < n; i++)
+          for (int j = 0; j < n; j++){
+             A[i][j] = 1;
+             B[i][j] = 1;
+          }
+        
+        clock_t t = clock();
+        matrixProductHeap(n, A, B);
+        t = clock() - t; 
+        // Calculate the time 
+        float time = ((float)t)/CLOCKS_PER_SEC;
+        printf("%f seconds \n", time); 
+
+       // printMatrixHeap(n, A);
+    }
     return 0;
 }
 
