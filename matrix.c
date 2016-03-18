@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #define CROSS_OVER 1
 
 // standard matrix multiplication 
-void matrixProduct(int n, int A[n][n], int B[n][n]) {
+void matrixProduct(int n, int** A, int** B) {
    int sums[n];
    for (int i = 0; i < n; i++){
        for (int j = 0; j < n; j++){
@@ -20,7 +21,7 @@ void matrixProduct(int n, int A[n][n], int B[n][n]) {
    }
 }
 
-void printMatrix(int n, int A[n][n]){
+void printMatrix(int n, int** A){
     for(int i = 0; i < n; i++){
         printf("\n");
         for(int j = 0; j < n; j++){
@@ -29,43 +30,55 @@ void printMatrix(int n, int A[n][n]){
     }
 }
 
+int** makeMatrix(int n){
+    int **C = (int **)malloc(n * sizeof(int *));
+    for (int i=0; i<n; i++)
+         C[i] = (int *)malloc(n * sizeof(int));
+    return C;
+}
+
+int** add(int n, int** X, int** Y){ 
+    int** C = makeMatrix(n);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+         C[i][j] = X[i][j] + Y[i][j];
+    
+    return C;
+}
+
+int** subtract(int n, int** X, int** Y){ 
+    int** C = makeMatrix(n);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+         C[i][j] = X[i][j] - Y[i][j];
+    return C;
+}
+
 int main(){
-    int n = 1000;
-    int A[n][n];
-    int B[n][n];
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
-            A[i][j] = 1;
-            B[i][j] = 1; 
-        }
-    }
+    int n = 1024;
+    int** A = makeMatrix(n);
+    int** B = makeMatrix(n);
+
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++){
+         A[i][j] = 1;
+         B[i][j] = 1;
+      }
+    
     clock_t t = clock();
     matrixProduct(n, A, B);
     t = clock() - t; 
     // Calculate the time 
     float time = ((float)t)/CLOCKS_PER_SEC;
-    printf("%f seconds \n", time);
-   //printMatrix(n, A);
+    printf("%f seconds \n", time); 
+
+    printMatrix(n, A);
+
     return 0;
 }
 
 
-# Helper functions
-int add(X, Y, n){}  
-    int C[n][n] = malloc(sizeof(int)*n**2)
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
-            [X[i][j] + Y[i][j] 
-        }
-    }
-
-}
-
-def subtract(X, Y):
-    C = [[X[i][j] - Y[i][j]  for j in range(len(X[0]))] for i in range(len(X))]
-    return C
-    
-    
+/*
 # Strassen Algorithm 
 def strassenAlg(X, Y):
     n = len(X)
@@ -137,15 +150,7 @@ def strassenAlg(X, Y):
             for j in xrange(n):
                 C[i][j] = EvenC[i][j]
         return C
-
-# prints out a matrix
-def printMatrix(matrix):
-    for line in matrix:
-        print "\t".join(map(str,line))
 */
-
-
-
 
 
 
