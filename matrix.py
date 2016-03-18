@@ -103,7 +103,7 @@ def printMatrix(matrix):
         print "\t".join(map(str,line))
 
 variable = []
-count = 500
+count = 600
 flag = 0
 print "Hello"
 while (count < 700):
