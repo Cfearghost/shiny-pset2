@@ -108,7 +108,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
 
         int matrix_size = (half_n * sizeof(int *) + half_n * half_n * sizeof(int));
-        int** allocated_memory = (int**) malloc(10*matrix_size);
+        int** allocated_memory = (int**) malloc(8*matrix_size);
         // initialize sub-matrices of X
         int** A = (int**) allocated_memory;
         int** B = (int**) (((char*) allocated_memory) + matrix_size) ;
