@@ -138,7 +138,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int big_matrix_size = n + n*n;
 
-        int** allocated_memory = (int**) malloc(72*matrix_size * sizeof(int));
+        int** allocated_memory = (int**) malloc(74*matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
         int** A = NULL;
@@ -266,7 +266,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int** EvenX = makeMatrix2(EvenX, allocated_memory, (n+1), 0, matrix_size);
         int** EvenY = makeMatrix2(EvenX, allocated_memory, (n+1), 1, matrix_size);
-        int** EvenC = makeMatrix2(EvenC, allocated_memory, (n+1), 1, matrix_size);
+        int** EvenC = makeMatrix2(EvenC, allocated_memory, (n+1), 2, matrix_size);
         
         for (int i = 0; i < n+1; i++)
           for (int j = 0; j < n+1; j++){
@@ -301,7 +301,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 2;
+    int n = 400;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
