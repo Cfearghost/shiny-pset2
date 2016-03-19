@@ -11,6 +11,8 @@ int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     return matrix;
 }
 
+        a11 = makeMatrix2(a11, allocated_memory, half_n, 0, matrix_size);
+
 void printMatrixHeap(int n, int** A){
     for(int i = 0; i < n; i++){
         printf("\n");
@@ -53,7 +55,8 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
           }
         }
     }
-    else{
+    else {
+        // Change the way we are allocating memory for submatrices
         // dimesnion of submatrices
         int half_n = n/2;
 
@@ -217,7 +220,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
 }
 
 int main(){
-    int n = 4;
+    int n = 2;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);

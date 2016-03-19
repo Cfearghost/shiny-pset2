@@ -5,8 +5,7 @@
 
 #define CROSS_OVER 1
 
-matrix newmatrix(int n)
-{
+matrix newmatrix(int n) {
     matrix a;
 
     a = (matrix)malloc(sizeof(*a));
@@ -139,24 +138,27 @@ void printma(int n, matrix a){
 	    int i, j;
 	    double **p = a->d;
 
-	    for (i = 0; i < n; i++)
-	        for (j = 0; j < n; j++)
-		        printf("%f\t", p[i][j]);
-	     
-	     printf("\n");
+	    for (i = 0; i < n; i++){
+	        for (j = 0; j < n; j++){
+		        printf("%f ", p[i][j]);
+		    }
+	    }
+	    //printf("\n");
 	 }
 	 else{
+	   // printf("\n");
 	    n /= 2;
 	    printma(n, a11);
 	    printma(n, a12);
 	    printma(n, a21);
 	    printma(n, a22);
 	 }
+	 printf("\n");
 }
 
 int main()
 {
-    int n = 1024;
+    int n = 512;
     matrix a, b, c, d;
     
     a = newmatrix(n);
@@ -167,7 +169,7 @@ int main()
     randomfill(n, b);
     clock_t t = clock();
     multiply(n, a, b, c, d);	/* strassen algorithm */
-    printma(n, c);
+    //printma(n, c);
     t = clock() - t; 
     // Calculate the time 
     float time = ((float)t)/CLOCKS_PER_SEC;
