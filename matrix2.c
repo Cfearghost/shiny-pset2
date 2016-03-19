@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 1
+#define CROSS_OVER 128
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
@@ -133,93 +133,49 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
                 d11[i][j] = D[i][j];                      // top left
                 d12[i][j] = D[i][j + half_n];            // top right
                 d21[i][j] = D[i + half_n][j];             // bottom left
-                d22[i][j] = D[i + half_n][j + half_n];    // bottom right*/
+                d22[i][j] = D[i + half_n][j + half_n];    // bottom right
             }
         }
         sub(half_n, a12, a22, d11);
-        //printMatrixHeap(half_n, d11);
-
         add(half_n, b21, b22, d12);
-        //printMatrixHeap(half_n, d12);
-
         strassenAlg(half_n, d11, d12, c11, d21);
-        //printMatrixHeap(half_n, c11);
-
         sub(half_n, a21, a11, d11);
-        //printMatrixHeap(half_n, d11);
-
         add(half_n, b11, b12, d12);
-        //printMatrixHeap(half_n, d12);
-
         strassenAlg(half_n, d11, d12, c22, d21);
-        //printMatrixHeap(half_n, c22);
-
         add(half_n, a11, a12, d11);
-        //printMatrixHeap(half_n, d11);
-
         strassenAlg(half_n, d11, b22, c12, d12);
-        //printMatrixHeap(half_n, c12);
-
         sub(half_n, c11, c12, c11);
-        //printMatrixHeap(half_n, c11);
-
         sub(half_n, b21, b11, d11);
-        //printMatrixHeap(half_n, d11);
-
         strassenAlg(half_n, a22, d11, c21, d12);
-        //printMatrixHeap(half_n, c21);
-
         add(half_n, c21, c11, c11);
-        //printMatrixHeap(half_n, c11);
-
         sub(half_n, b12, b22, d11);
-        //printMatrixHeap(half_n, d11);
-
         strassenAlg(half_n, a11, d11, d12, d21);
-        //printMatrixHeap(half_n, d12);
-
         add(half_n, d12, c12, c12);
-        //printMatrixHeap(half_n, c12);
-
         add(half_n, d12, c22, c22);
-        //printMatrixHeap(half_n, c22);
-
         add(half_n, a21, a22, d11);
-        //printMatrixHeap(half_n, d11);
-
         strassenAlg(half_n, d11, b11, d12, d21);
-        //printMatrixHeap(half_n, d12);
-
         add(half_n, d12, c21, c21);
-        //printMatrixHeap(half_n, c21);
-
         sub(half_n, c22, d12, c22);
-        //printMatrixHeap(half_n, c22);
-
         add(half_n, a11, a22, d11);
-        //printMatrixHeap(half_n, d11);
-
         add(half_n, b11, b22, d12);
-        //printMatrixHeap(half_n, d12);
-
         strassenAlg(half_n, d11, d12, d21, d22);
-        //printMatrixHeap(half_n, d21);
-
         add(half_n, d21, c11, c11);
-        //printMatrixHeap(half_n, c11);
-
         add(half_n, d21, c22, c22);
-        //printMatrixHeap(half_n, c22);
 
-        printMatrixHeap(half_n, c11);
-        printMatrixHeap(half_n, c12);
-        printMatrixHeap(half_n, c21);
-        printMatrixHeap(half_n, c22);
+        for (int i = 0; i < half_n; i++){
+            for (int j = 0; j < half_n; j++){
+                C[i][j] = c11[i][j];                     // top left
+                C[i][j + half_n] = c12[i][j];            // top right
+                C[i + half_n][j] = c21[i][j];             // bottom left
+                C[i + half_n][j + half_n] = c22[i][j];    // bottom right
+            }
+        }
+        free(allocated_memory);
     }
 }
 
 int main(){
-    int n = 4;
+    int n = 1024;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -242,7 +198,7 @@ int main(){
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
     free(allocated_memory);
-    printMatrixHeap(n, C);
+    //printMatrixHeap(n, C);
     return 0;
 }
 
