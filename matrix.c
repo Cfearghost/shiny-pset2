@@ -12,6 +12,13 @@ int** makeMatrix(int n){
     return C;
 }
 
+int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
+    matrix = (int**) (alloc + id*matrix_size);
+    for (int i=0; i<n; i++)
+        matrix[i] = (int *) (matrix + (i+1)*n);
+    return matrix;
+}
+
 // standard matrix multiplication 
 void matrixProductHeap(int n, int** A, int** B) {
    int sums[n];
@@ -108,62 +115,32 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int matrix_size = half_n + half_n * half_n;
 
-        int** allocated_memory = (int**) malloc(16*matrix_size * sizeof(int));
+        int** allocated_memory = (int**) malloc(20*matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
-        int** A = (int**) allocated_memory;
-        for (int i=0; i<half_n; i++)
-          A[i] = (int *) (allocated_memory + (i+1)*half_n);
+        int** A;
+        A = makeMatrix2(A, allocated_memory, half_n, 0, matrix_size);
 
-        int** B = (int**) (allocated_memory + matrix_size);
-        for (int i=0; i<n; i++)
-          B[i] = (int *) (B + (i+1)*half_n);
+        int** B;
+        B = makeMatrix2(B, allocated_memory, half_n, 1, matrix_size);
 
-        int** C = (int**) (allocated_memory + (2*matrix_size));
-        for (int i=0; i<n; i++)
-          C[i] = (int *) (C + (i+1)*half_n);
+        int** C;
+        C = makeMatrix2(C, allocated_memory, half_n, 2, matrix_size);
 
-        int** D = (int**) (allocated_memory + (3*matrix_size));
-        for (int i=0; i<n; i++)
-          D[i] = (int *) (D + (i+1)*half_n);
+        int** D;
+        D = makeMatrix2(D, allocated_memory, half_n, 3, matrix_size);
 
-        int** E = (int**) (allocated_memory + (4*matrix_size));
-        for (int i=0; i<n; i++)
-            E[i] = (int *) (E + (i+1)*half_n);
+        int** E;
+        E = makeMatrix2(E, allocated_memory, half_n, 4, matrix_size);
 
-        int** F = (int**) (allocated_memory + (5*matrix_size));
-        for (int i=0; i<n; i++)
-          F[i] = (int *) (F + (i+1)*half_n);
+        int** F;
+        F = makeMatrix2(F, allocated_memory, half_n, 5, matrix_size);
 
-        int** G = (int**) (allocated_memory + (6*matrix_size));
-        for (int i=0; i<n; i++)
-          G[i] = (int *) (G + (i+1)*half_n);
+        int** G;
+        G = makeMatrix2(G, allocated_memory, half_n, 6, matrix_size);
 
-        int** H = (int**) (allocated_memory + (7*matrix_size));
-        for (int i=0; i<n; i++)
-          H[i] = (int *) (H + (i+1)*half_n);
-
-        /* int** C = (int**) (((char**) allocated_memory) + 2*matrix_size);
-        int** D = (int**) (((char**) allocated_memory) + 3*matrix_size);
-              
-        // initialize sub-matrices of Y
-        int** E = (int**) (((char**) allocated_memory) + 4*matrix_size);
-        int** F = (int**) (((char**) allocated_memory) + 5*matrix_size);
-        int** G = (int**) (((char**) allocated_memory) + 6*matrix_size);
-        int** H = (int**) (((char**) allocated_memory) + 7*matrix_size);*/
-
-        
-        // initialize sub-matrices of X
-        //int** A = makeMatrix(half_n); 
-        //int** B = makeMatrix(half_n);
-        //int** C = makeMatrix(half_n);
-        //int** D = makeMatrix(half_n);
-              
-        // initialize sub-matrices of Y
-        //int** E = makeMatrix(half_n);
-        //int** F = makeMatrix(half_n);
-        //int** G = makeMatrix(half_n);
-        //int** H = makeMatrix(half_n);
+        int** H;
+        H = makeMatrix2(H, allocated_memory, half_n, 7, matrix_size);
       
         // dividing the matrices in 4 sub-matrices:
         for (int i = 0; i < half_n; i++){
@@ -267,8 +244,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 200;
-    if (n == 200){
+    int n = 100;
+    if (n == 100){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
