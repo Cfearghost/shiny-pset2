@@ -11,7 +11,6 @@ int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     return matrix;
 }
 
-        a11 = makeMatrix2(a11, allocated_memory, half_n, 0, matrix_size);
 
 void printMatrixHeap(int n, int** A){
     for(int i = 0; i < n; i++){
@@ -134,7 +133,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
                 d11[i][j] = D[i][j];                      // top left
                 d12[i][j] = D[i][j + half_n];            // top right
                 d21[i][j] = D[i + half_n][j];             // bottom left
-                d22[i][j] = D[i + half_n][j + half_n];    // bottom right
+                d22[i][j] = D[i + half_n][j + half_n];    // bottom right*/
             }
         }
         sub(half_n, a12, a22, d11);
@@ -220,7 +219,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
 }
 
 int main(){
-    int n = 2;
+    int n = 4;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);

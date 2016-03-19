@@ -139,11 +139,12 @@ void printma(int n, matrix a){
 	    double **p = a->d;
 
 	    for (i = 0; i < n; i++){
-	        for (j = 0; j < n; j++){
-		        printf("%f ", p[i][j]);
-		    }
-	    }
-	    //printf("\n");
+	        printf("\n");
+            for (j = 0; j < n; j++)
+		        printf("%f", p[i][j]);
+        }
+	     
+	     printf("\n");
 	 }
 	 else{
 	   // printf("\n");
