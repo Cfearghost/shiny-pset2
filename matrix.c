@@ -115,9 +115,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int matrix_size = half_n + half_n * half_n;
 
-        int big_matrix_size = n + n*n;
-
-        int** allocated_memory = (int**) malloc(38*matrix_size * sizeof(int) + big_matrix_size * sizeof(int));
+        int** allocated_memory = (int**) malloc(38*matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
         int** A;
@@ -206,11 +204,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         // Grouping the results obtained in a single matrix: 
         int** C1 = makeMatrix(n);
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-               C1[i][j] = 0;
-            }
-        }
+
         for (int i = 0; i < half_n; i++){
             for (int j = 0; j < half_n; j++){
                 C1[i][j] = AE_plus_BG[i][j];
@@ -224,6 +218,7 @@ int** strassenAlg(int n, int** X, int** Y) {
     }
     
     else { 
+
         int** EvenX = makeMatrix(n+1);
         int** EvenY = makeMatrix(n+1);
         
@@ -263,8 +258,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 100;
-    if (n == 100){
+    int n = 10;
+    if (n == 10){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
@@ -283,7 +278,7 @@ int main(){
         free(A);
         free(B);
         free(C);
-        //printMatrixHeap(n, C);
+        printMatrixHeap(n, C);
     }
     else if (n == 3){
         int** A = makeMatrix(n);
