@@ -115,7 +115,9 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int matrix_size = half_n + half_n * half_n;
 
-        int** allocated_memory = (int**) malloc(20*matrix_size * sizeof(int));
+        int big_matrix_size = n + n*n;
+
+        int** allocated_memory = (int**) malloc(38*matrix_size * sizeof(int) + big_matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
         int** A;
@@ -158,13 +160,26 @@ int** strassenAlg(int n, int** X, int** Y) {
         }
 
         // Calculating p1 to p7:
-        int** p1 = makeMatrix(half_n);
-        int** p2 = makeMatrix(half_n);
-        int** p3 = makeMatrix(half_n);
-        int** p4 = makeMatrix(half_n);
-        int** p5 = makeMatrix(half_n);
-        int** p6 = makeMatrix(half_n);
-        int** p7 = makeMatrix(half_n);
+        int** p1;
+        p1 = makeMatrix2(p1, allocated_memory, half_n, 8, matrix_size);
+
+        int** p2;
+        p2 = makeMatrix2(p2, allocated_memory, half_n, 9, matrix_size);
+
+        int** p3;
+        p3 = makeMatrix2(p3, allocated_memory, half_n, 10, matrix_size);
+
+        int** p4;
+        p4 = makeMatrix2(p4, allocated_memory, half_n, 11, matrix_size);
+
+        int** p5;
+        p5 = makeMatrix2(p5, allocated_memory, half_n, 12, matrix_size);
+
+        int** p6;
+        p6 = makeMatrix2(p6, allocated_memory, half_n, 13, matrix_size);
+
+        int** p7;
+        p7 = makeMatrix2(p7, allocated_memory, half_n, 14, matrix_size);
         
         p1 = strassenAlg(half_n, A, subtract(half_n, F, H));          //p1 = A(F - H)
         p2 = strassenAlg(half_n, add(half_n, A, B), H);                 //p2 = (A + B)H
@@ -175,10 +190,14 @@ int** strassenAlg(int n, int** X, int** Y) {
         p7 = strassenAlg(half_n, subtract(half_n, C, A), add(half_n, E, F));    //p7 = (A - C)(E + F)
 
         // calculating submatrices of C       
-        int** AE_plus_BG = makeMatrix(half_n);
-        int** AF_plus_BH = makeMatrix(half_n);
-        int** CE_plus_DG = makeMatrix(half_n);
-        int** CF_plus_DH = makeMatrix(half_n);
+        int** AE_plus_BG;
+        AE_plus_BG = makeMatrix2(AE_plus_BG, allocated_memory, half_n, 15, matrix_size);
+        int** AF_plus_BH;
+        AF_plus_BH = makeMatrix2(AF_plus_BH, allocated_memory, half_n, 16, matrix_size);
+        int** CE_plus_DG;
+        CE_plus_DG = makeMatrix2(CE_plus_DG, allocated_memory, half_n, 17, matrix_size);
+        int** CF_plus_DH;
+        CF_plus_DH = makeMatrix2(CF_plus_DH, allocated_memory, half_n, 18, matrix_size);
         
         AE_plus_BG = subtract(half_n, add(half_n, add(half_n, p5, p4), p6), p2); 
         AF_plus_BH = add(half_n, p1, p2); 
