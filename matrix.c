@@ -209,6 +209,14 @@ int** strassenAlg(int n, int** X, int** Y) {
             }
          }
         free(allocated_memory);
+        free(p1);
+        free(p2);
+        free(p3);
+        free(p4);
+        free(p5);
+        free(p6);
+        free(p7);
+
         //print("C -> %i", C1[0][0]);
         return C1;
     }
