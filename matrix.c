@@ -260,8 +260,13 @@ int** strassenAlg(int n, int** X, int** Y) {
     }
     
     else { 
-        int** EvenX = makeMatrix(n+1);
-        int** EvenY = makeMatrix(n+1);
+        int matrix_size = (n+1) + (n+1) * (n+1);
+
+        int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+
+        int** EvenX = makeMatrix2(EvenX, allocated_memory, (n+1), 0, matrix_size);
+        int** EvenY = makeMatrix2(EvenX, allocated_memory, (n+1), 1, matrix_size);
+        int** EvenC = makeMatrix2(EvenC, allocated_memory, (n+1), 1, matrix_size);
         
         for (int i = 0; i < n+1; i++)
           for (int j = 0; j < n+1; j++){
@@ -276,10 +281,7 @@ int** strassenAlg(int n, int** X, int** Y) {
          }
         }    
         
-        int** EvenC = strassenAlg(n+1,EvenX, EvenY);
-        
-        free(EvenX);
-        free(EvenY);
+        EvenC = strassenAlg(n+1,EvenX, EvenY);
 
         int** C = makeMatrix(n);
          for (int i = 0; i < n; i++)
@@ -299,81 +301,24 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 100;
-    if (n == 100){
-        int** A = makeMatrix(n);
-        int** B = makeMatrix(n);
-        int** C = makeMatrix(n);
-
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-          }
-          
-        clock_t t = clock();
-        C = strassenAlg(n, A, B);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        printf("%f seconds \n", time); 
-        free(A);
-        free(B);
-       // printMatrixHeap(n, C);
-        free(C);
-    }
-    else if (n == 3){
-        int** A = makeMatrix(n);
-        int** B = makeMatrix(n);
-        int** C = makeMatrix(n);
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-             C[i][j] = 0;
-          }
-        
-        C = matrixProductHeap2(n, A, B);
-        // Calculate the time 
-        printMatrixHeap(n, C);
-    }
-    /*
-    else if (n < 1024){
-        int A[n][n];
-        int B[n][n];
-
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-          }
-        
-        clock_t t = clock();
-        matrixProductStack(n, A, B);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        printf("%f seconds \n", time); 
-       // printMatrixStack(n, A);
-    } */
-    else {
-        int** A = makeMatrix(n);
-        int** B = makeMatrix(n);
-
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-          }
-        
-        clock_t t = clock();
-        matrixProductHeap(n, A, B);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        printf("%f seconds \n", time); 
-        //printMatrixHeap(n, A);
-    }
+    int n = 2;
+    int matrix_size = n + n*n;
+    int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+    int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+    int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+    int** C = makeMatrix2(C, allocated_memory, n, 2, matrix_size);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++){
+         A[i][j] = 1;
+         B[i][j] = 1;
+      }
+    clock_t t = clock();
+    C = strassenAlg(n, A, B);
+    t = clock() - t; 
+    // Calculate the time 
+    float time = ((float)t)/CLOCKS_PER_SEC;
+    printf("%f seconds \n", time); 
+    //printMatrixHeap(n, C);
     return 0;
 }
 
