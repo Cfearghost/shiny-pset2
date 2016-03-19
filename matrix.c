@@ -106,35 +106,65 @@ int** strassenAlg(int n, int** X, int** Y) {
         // dimesnion of submatrices
         int half_n = n/2;
 
+        int matrix_size = half_n + half_n * half_n;
 
-        int matrix_size = (half_n * sizeof(int *) + half_n * half_n * sizeof(int));
-        int** allocated_memory = (int**) malloc(8*matrix_size);
+        int** allocated_memory = (int**) malloc(16*matrix_size * sizeof(int));
         // initialize sub-matrices of X
+
         int** A = (int**) allocated_memory;
-        int** B = (int**) (((char*) allocated_memory) + matrix_size) ;
-        int** C = (int**) (((char*) allocated_memory) + 2*matrix_size);
-        int** D = (int**) (((char*) allocated_memory) + 3*matrix_size);
-              
-        // initialize sub-matrices of Y
-        int** E = (int**) (((char*) allocated_memory) + 4*matrix_size);
-        int** F = (int**) (((char*) allocated_memory) + 5*matrix_size);
-        int** G = (int**) (((char*) allocated_memory) + 6*matrix_size);
-        int** H = (int**) (((char*) allocated_memory) + 7*matrix_size);
+        for (int i=0; i<half_n; i++)
+          A[i] = (int *) (allocated_memory + (i+1)*half_n);
 
-        /*
-        // initialize sub-matrices of X
-        int** A = makeMatrix(half_n);
-        int** B = makeMatrix(half_n);
-        int** C = makeMatrix(half_n);
-        int** D = makeMatrix(half_n);
+        int** B = (int**) (allocated_memory + matrix_size);
+        for (int i=0; i<n; i++)
+          B[i] = (int *) (B + (i+1)*half_n);
+
+        int** C = (int**) (allocated_memory + (2*matrix_size));
+        for (int i=0; i<n; i++)
+          C[i] = (int *) (C + (i+1)*half_n);
+
+        int** D = (int**) (allocated_memory + (3*matrix_size));
+        for (int i=0; i<n; i++)
+          D[i] = (int *) (D + (i+1)*half_n);
+
+        int** E = (int**) (allocated_memory + (4*matrix_size));
+        for (int i=0; i<n; i++)
+            E[i] = (int *) (E + (i+1)*half_n);
+
+        int** F = (int**) (allocated_memory + (5*matrix_size));
+        for (int i=0; i<n; i++)
+          F[i] = (int *) (F + (i+1)*half_n);
+
+        int** G = (int**) (allocated_memory + (6*matrix_size));
+        for (int i=0; i<n; i++)
+          G[i] = (int *) (G + (i+1)*half_n);
+
+        int** H = (int**) (allocated_memory + (7*matrix_size));
+        for (int i=0; i<n; i++)
+          H[i] = (int *) (H + (i+1)*half_n);
+
+        /* int** C = (int**) (((char**) allocated_memory) + 2*matrix_size);
+        int** D = (int**) (((char**) allocated_memory) + 3*matrix_size);
               
         // initialize sub-matrices of Y
-        int** E = makeMatrix(half_n);
-        int** F = makeMatrix(half_n);
-        int** G = makeMatrix(half_n);
-        int** H = makeMatrix(half_n);
+        int** E = (int**) (((char**) allocated_memory) + 4*matrix_size);
+        int** F = (int**) (((char**) allocated_memory) + 5*matrix_size);
+        int** G = (int**) (((char**) allocated_memory) + 6*matrix_size);
+        int** H = (int**) (((char**) allocated_memory) + 7*matrix_size);*/
+
+        
+        // initialize sub-matrices of X
+        //int** A = makeMatrix(half_n); 
+        //int** B = makeMatrix(half_n);
+        //int** C = makeMatrix(half_n);
+        //int** D = makeMatrix(half_n);
+              
+        // initialize sub-matrices of Y
+        //int** E = makeMatrix(half_n);
+        //int** F = makeMatrix(half_n);
+        //int** G = makeMatrix(half_n);
+        //int** H = makeMatrix(half_n);
       
-      */
         // dividing the matrices in 4 sub-matrices:
         for (int i = 0; i < half_n; i++){
             for (int j = 0; j < half_n; j++){
@@ -166,15 +196,6 @@ int** strassenAlg(int n, int** X, int** Y) {
         p5 = strassenAlg(half_n, add(half_n, A, D), add(half_n, E, H));       //p5 = (A + D)(E + H)  
         p6 = strassenAlg(half_n, subtract(half_n, B, D),  add(half_n, G, H));   //p6 = (B - D)(G + H)
         p7 = strassenAlg(half_n, subtract(half_n, C, A), add(half_n, E, F));    //p7 = (A - C)(E + F)
-        
-        free(A);
-        free(B);
-        free(C);
-        free(D);
-        free(E);
-        free(F);
-        free(G);
-        free(H);
 
         // calculating submatrices of C       
         int** AE_plus_BG = makeMatrix(half_n);
@@ -186,14 +207,6 @@ int** strassenAlg(int n, int** X, int** Y) {
         AF_plus_BH = add(half_n, p1, p2); 
         CE_plus_DG = add(half_n, p3, p4);  
         CF_plus_DH = subtract(half_n, add(half_n, add(half_n, p5, p1), p7), p3);
-        
-        free(p1);
-        free(p2);
-        free(p3);
-        free(p4);
-        free(p5);
-        free(p6);
-        free(p7);
 
         // Grouping the results obtained in a single matrix: 
         int** C1 = makeMatrix(n);
@@ -210,11 +223,6 @@ int** strassenAlg(int n, int** X, int** Y) {
                 C1[i + half_n][j + half_n] = CF_plus_DH[i][j];
             }
          }
-       
-        free(AE_plus_BG);
-        free(AF_plus_BH);
-        free(CE_plus_DG);
-        free(CF_plus_DH);
 
         return C1;
     }
@@ -259,8 +267,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 100;
-    if (n == 100){
+    int n = 200;
+    if (n == 200){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
