@@ -103,22 +103,20 @@ int** subtract(int n, int** X, int** Y){
 }
 
 
-int** add2(int n, int id, int** X, int** Y){ 
+int** add2(int n, int id, int** memory, int** X, int** Y){ 
     int** C = NULL;
-    int sz = n*n;
-    int** allocated_memory = (int**) malloc(2*sz* sizeof(int));
-    C = makeMatrix2(C, allocated_memory, n, id, sz);
+    int sz = n*n +n;
+    C = makeMatrix2(C, memory, n, id, sz);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          C[i][j] = X[i][j] + Y[i][j];
     return C;
 }
 
-int** subtract2(int n, int id, int** X, int** Y){ 
+int** subtract2(int n, int id, int** memory, int** X, int** Y){ 
     int** C = NULL;
-    int sz = n*n;
-    int** allocated_memory = (int**) malloc(1*n*n * sizeof(int));
-    C = makeMatrix2(C, allocated_memory, n, id, sz);
+    int sz = n*n +n;
+    C = makeMatrix2(C, memory, n, id, sz);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
          C[i][j] = X[i][j] - Y[i][j];
@@ -140,7 +138,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int big_matrix_size = n + n*n;
 
-        int** allocated_memory = (int**) malloc(38*matrix_size * sizeof(int) + big_matrix_size * sizeof(int));
+        int** allocated_memory = (int**) malloc(72*matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
         int** A = NULL;
@@ -166,7 +164,21 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int** H = NULL;
         H = makeMatrix2(H, allocated_memory, half_n, 7, matrix_size);
-      
+        
+        for (int i = 0; i < half_n; i++){
+          for (int j = 0; j < half_n; j++){
+             A[i][j] = 0;
+             B[i][j] = 0;
+             C[i][j] = 0;
+             D[i][j] = 0;
+ 
+             E[i][j] = 0;
+             F[i][j] = 0;
+             G[i][j] = 0;
+             H[i][j] = 0;
+          }
+        }
+        
         // dividing the matrices in 4 sub-matrices:
         for (int i = 0; i < half_n; i++){
             for (int j = 0; j < half_n; j++){
@@ -204,28 +216,29 @@ int** strassenAlg(int n, int** X, int** Y) {
         int** p7 = NULL;
         p7 = makeMatrix2(p7, allocated_memory, half_n, 14, matrix_size);
         
-        p1 = strassenAlg(half_n, A, subtract(half_n, F, H));          //p1 = A(F - H)
-        p2 = strassenAlg(half_n, add(half_n, A, B), H);                 //p2 = (A + B)H
-        p3 = strassenAlg(half_n, add(half_n, C, D), E);                 //p3 = (C + D)E
-        p4 = strassenAlg(half_n, D, subtract(half_n, G, E));         //p4 = D(G-E)
-        p5 = strassenAlg(half_n, add(half_n, A, D), add(half_n, E, H));       //p5 = (A + D)(E + H)  
-        p6 = strassenAlg(half_n, subtract(half_n, B, D),  add(half_n, G, H));   //p6 = (B - D)(G + H)
-        p7 = strassenAlg(half_n, subtract(half_n, C, A), add(half_n, E, F));    //p7 = (A - C)(E + F)
+        
+        p1 = strassenAlg(half_n, A, subtract2(half_n, 15, allocated_memory, F, H));          //p1 = A(F - H)
+        p2 = strassenAlg(half_n, add2(half_n, 16, allocated_memory, A, B), H);                 //p2 = (A + B)H
+        p3 = strassenAlg(half_n, add2(half_n, 17, allocated_memory, C, D), E);                 //p3 = (C + D)E
+        p4 = strassenAlg(half_n, D, subtract2(half_n, 18, allocated_memory, G, E));         //p4 = D(G-E)
+        p5 = strassenAlg(half_n, add2(half_n, 19, allocated_memory, A, D), add2(half_n, 20, allocated_memory, E, H));       //p5 = (A + D)(E + H)  
+        p6 = strassenAlg(half_n, subtract2(half_n, 21, allocated_memory, B, D),  add2(half_n, 22, allocated_memory, G, H));   //p6 = (B - D)(G + H)
+        p7 = strassenAlg(half_n, subtract2(half_n, 23, allocated_memory, C, A), add2(half_n, 24, allocated_memory, E, F));    //p7 = (A - C)(E + F)
 
         // calculating submatrices of C       
         int** AE_plus_BG = NULL;
-        AE_plus_BG = makeMatrix2(AE_plus_BG, allocated_memory, half_n, 15, matrix_size);
+        AE_plus_BG = makeMatrix2(AE_plus_BG, allocated_memory, half_n, 25, matrix_size);
         int** AF_plus_BH = NULL;
-        AF_plus_BH = makeMatrix2(AF_plus_BH, allocated_memory, half_n, 16, matrix_size);
+        AF_plus_BH = makeMatrix2(AF_plus_BH, allocated_memory, half_n, 26, matrix_size);
         int** CE_plus_DG = NULL;
-        CE_plus_DG = makeMatrix2(CE_plus_DG, allocated_memory, half_n, 17, matrix_size);
+        CE_plus_DG = makeMatrix2(CE_plus_DG, allocated_memory, half_n, 27, matrix_size);
         int** CF_plus_DH = NULL;
-        CF_plus_DH = makeMatrix2(CF_plus_DH, allocated_memory, half_n, 18, matrix_size);
+        CF_plus_DH = makeMatrix2(CF_plus_DH, allocated_memory, half_n, 28, matrix_size);
         
-        AE_plus_BG = subtract(half_n, add(half_n, add(half_n, p5, p4), p6), p2); 
-        AF_plus_BH = add(half_n, p1, p2); 
-        CE_plus_DG = add(half_n, p3, p4);  
-        CF_plus_DH = subtract(half_n, add(half_n, add(half_n, p5, p1), p7), p3);
+        AE_plus_BG = subtract2(half_n, 29, allocated_memory, add2(half_n, 30, allocated_memory, add2(half_n, 31, allocated_memory, p5, p4), p6), p2); 
+        AF_plus_BH = add2(half_n, 32, allocated_memory, p1, p2); 
+        CE_plus_DG = add2(half_n, 33, allocated_memory,p3, p4);  
+        CF_plus_DH = subtract2(half_n, 34, allocated_memory, add2(half_n, 35, allocated_memory, add2(half_n, 36, allocated_memory, p5, p1), p7), p3);
 
         // Grouping the results obtained in a single matrix: 
         int** C1 = makeMatrix(n);
@@ -242,7 +255,7 @@ int** strassenAlg(int n, int** X, int** Y) {
                 C1[i + half_n][j + half_n] = CF_plus_DH[i][j];
             }
          }
-
+        //print("C -> %i", C1[0][0]);
         return C1;
     }
     
@@ -286,8 +299,8 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 6;
-    if (n == 6){
+    int n = 100;
+    if (n == 100){
         int** A = makeMatrix(n);
         int** B = makeMatrix(n);
         int** C = makeMatrix(n);
@@ -297,6 +310,7 @@ int main(){
              A[i][j] = 1;
              B[i][j] = 1;
           }
+          
         clock_t t = clock();
         C = strassenAlg(n, A, B);
         t = clock() - t; 
@@ -305,8 +319,8 @@ int main(){
         printf("%f seconds \n", time); 
         free(A);
         free(B);
+       // printMatrixHeap(n, C);
         free(C);
-        printMatrixHeap(n, C);
     }
     else if (n == 3){
         int** A = makeMatrix(n);
