@@ -8,7 +8,6 @@
 int** makeMatrix(int n){
     int **C = (int **)malloc(n * sizeof(int *));
     for (int i=0; i<n; i++)
-    // Don't we need to malloc every column/row??
          C[i] = (int *)malloc(n * sizeof(int));
     return C;
 }
@@ -193,6 +192,14 @@ int** strassenAlg(int n, int** X, int** Y) {
         int** CE_plus_DG = add2(half_n, 22, allocated_memory,p3, p4);  
         int** CF_plus_DH = subtract2(half_n, 23, allocated_memory, add2(half_n, 24, allocated_memory, add2(half_n, 25, allocated_memory, p5, p1), p7), p3);
 
+        free(p1);
+        free(p2);
+        free(p3);
+        free(p4);
+        free(p5);
+        free(p6);
+        free(p7);
+
         // Grouping the results obtained in a single matrix: 
         int** C1 = makeMatrix(n);
         for (int i = 0; i < n; i++){
@@ -209,13 +216,7 @@ int** strassenAlg(int n, int** X, int** Y) {
             }
          }
         free(allocated_memory);
-        free(p1);
-        free(p2);
-        free(p3);
-        free(p4);
-        free(p5);
-        free(p6);
-        free(p7);
+
 
         //print("C -> %i", C1[0][0]);
         return C1;
@@ -259,7 +260,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 2;
+    int n = 10;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(4*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -276,9 +277,9 @@ int main(){
     // Calculate the time 
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
-
     free(allocated_memory);
     printMatrixHeap(n, C);
+    free(C);
     return 0;
 }
 
