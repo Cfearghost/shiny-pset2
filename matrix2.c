@@ -217,7 +217,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
 }
 
 int main(){
-    int n = 8;
+    int n = 4;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
