@@ -260,7 +260,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 2000;
+    int n = 1024;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(4*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
