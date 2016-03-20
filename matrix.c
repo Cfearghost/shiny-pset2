@@ -4,12 +4,6 @@
 
 #define CROSS_OVER 1
 
-
-typedef union _matrix {
-    int C[n][n];
-    int **C;
-} *matrix;
-
 // Makes matrix on the heap
 int** makeMatrix(int n){
     int **C = (int **)malloc(n * sizeof(int *));
