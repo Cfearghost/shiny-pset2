@@ -259,7 +259,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 10;
+    int n = 100;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -276,7 +276,7 @@ int main(){
     // Calculate the time 
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
-    printMatrixHeap(n, C);
+    //printMatrixHeap(n, C);
     return 0;
 }
 
