@@ -139,9 +139,11 @@ void printma(int n, matrix a){
 	    int i, j;
 	    double **p = a->d;
 
-	    for (i = 0; i < n; i++)
-	        for (j = 0; j < n; j++)
-		        printf("%f\t", p[i][j]);
+	    for (i = 0; i < n; i++){
+	        printf("\n");
+            for (j = 0; j < n; j++)
+		        printf("%f", p[i][j]);
+        }
 	     
 	     printf("\n");
 	 }
@@ -156,7 +158,7 @@ void printma(int n, matrix a){
 
 int main()
 {
-    int n = 1024;
+    int n = 8;
     matrix a, b, c, d;
     
     a = newmatrix(n);

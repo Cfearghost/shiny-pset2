@@ -260,7 +260,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 10;
+    int n = 2000;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(4*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -272,13 +272,13 @@ int main(){
          B[i][j] = 1;
       }
     clock_t t = clock();
-    int** C = strassenAlg(n, A, B);
+    int** C = matrixProductHeap2(n, A, B);
     t = clock() - t; 
     // Calculate the time 
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
     free(allocated_memory);
-    printMatrixHeap(n, C);
+    //printMatrixHeap(n, C);
     free(C);
     return 0;
 }

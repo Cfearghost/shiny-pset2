@@ -86,29 +86,29 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
         int** b22 = NULL;
         b22 = makeMatrix2(b22, allocated_memory, half_n, 7, matrix_size);
 
-        int** c11 = NULL;
-        c11 = makeMatrix2(c11, allocated_memory, half_n, 8, matrix_size);
+        int** C[0] = NULL;
+        C[0] = makeMatrix2(C[0], allocated_memory, half_n, 8, matrix_size);
 
-        int** c12 = NULL;
-        c12 = makeMatrix2(c12, allocated_memory, half_n, 9, matrix_size);
+        int** C[1] = NULL;
+        C[1] = makeMatrix2(C[1], allocated_memory, half_n, 9, matrix_size);
 
-        int** c21 = NULL;
-        c21 = makeMatrix2(c21, allocated_memory, half_n, 10, matrix_size);
+        int** C[2] = NULL;
+        C[2] = makeMatrix2(C[2], allocated_memory, half_n, 10, matrix_size);
 
-        int** c22 = NULL;
-        c22 = makeMatrix2(c22, allocated_memory, half_n, 11, matrix_size);
+        int** C[3] = NULL;
+        C[3] = makeMatrix2(C[3], allocated_memory, half_n, 11, matrix_size);
 
-        int** d11 = NULL;
-        d11 = makeMatrix2(d11, allocated_memory, half_n, 12, matrix_size);
+        int** D[0] = NULL;
+        D[0] = makeMatrix2(D[0], allocated_memory, half_n, 12, matrix_size);
 
-        int** d12 = NULL;
-        d12 = makeMatrix2(d12, allocated_memory, half_n, 13, matrix_size);
+        int** D[1] = NULL;
+        D[1] = makeMatrix2(D[1], allocated_memory, half_n, 13, matrix_size);
 
-        int** d21 = NULL;
-        d21 = makeMatrix2(d21, allocated_memory, half_n, 14, matrix_size);
+        int** D[2] = NULL;
+        D[2] = makeMatrix2(D[2], allocated_memory, half_n, 14, matrix_size);
 
-        int** d22 = NULL;
-        d22 = makeMatrix2(d22, allocated_memory, half_n, 15, matrix_size);
+        int** D[3] = NULL;
+        D[3] = makeMatrix2(D[3], allocated_memory, half_n, 15, matrix_size);
         
         // dividing the matrices in 4 sub-matrices:
         for (int i = 0; i < half_n; i++){
@@ -123,7 +123,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
                 b21[i][j] = Y[i + half_n][j];             // bottom left
                 b22[i][j] = Y[i + half_n][j + half_n];    // bottom right
 
-                c11[i][j] = C[i][j];                     // top left
+                /*c11[i][j] = C[i][j];                     // top left
                 c12[i][j] = C[i][j + half_n];            // top right
                 c21[i][j] = C[i + half_n][j];             // bottom left
                 c22[i][j] = C[i + half_n][j + half_n];    // bottom right
@@ -131,7 +131,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
                 d11[i][j] = D[i][j];                      // top left
                 d12[i][j] = D[i][j + half_n];            // top right
                 d21[i][j] = D[i + half_n][j];             // bottom left
-                d22[i][j] = D[i + half_n][j + half_n];    // bottom right
+                d22[i][j] = D[i + half_n][j + half_n];    // bottom right*/
             }
         }
         sub(half_n, a12, a22, d11);
@@ -209,15 +209,15 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
         add(half_n, d21, c22, c22);
         //printMatrixHeap(half_n, c22);
 
-        printMatrixHeap(half_n, c11);
-        printMatrixHeap(half_n, c12);
-        printMatrixHeap(half_n, c21);
-        printMatrixHeap(half_n, c22);
+       // printMatrixHeap(half_n, c11);
+        //printMatrixHeap(half_n, c12);
+        //printMatrixHeap(half_n, c21);
+        //printMatrixHeap(half_n, c22);
     }
 }
 
 int main(){
-    int n = 4;
+    int n = 2048;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -240,7 +240,7 @@ int main(){
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
     free(allocated_memory);
-    printMatrixHeap(n, C);
+    //printMatrixHeap(n, C);
     return 0;
 }
 
