@@ -126,8 +126,7 @@ int** subtract2(int n, int id, int** memory, int** X, int** Y){
 // Strassen Algorithm 
 int** strassenAlg(int n, int** X, int** Y) {
     if (n <= CROSS_OVER){
-        int** C = makeMatrix(n);
-        C = matrixProductHeap2(n, X, Y);
+        int** C = matrixProductHeap2(n, X, Y);
         return C;
     }
     else if (n % 2 == 0){
@@ -136,9 +135,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int matrix_size = half_n + half_n * half_n;
 
-        int big_matrix_size = n + n*n;
-
-        int** allocated_memory = (int**) malloc(74*matrix_size * sizeof(int));
+        int** allocated_memory = (int**) malloc(52*matrix_size * sizeof(int));
         // initialize sub-matrices of X
 
         int** A = NULL;
@@ -181,19 +178,19 @@ int** strassenAlg(int n, int** X, int** Y) {
         }
 
         // Calculating p1 to p7:      
-        int** p1 = strassenAlg(half_n, A, subtract2(half_n, 15, allocated_memory, F, H));          //p1 = A(F - H)
-        int** p2 = strassenAlg(half_n, add2(half_n, 16, allocated_memory, A, B), H);                 //p2 = (A + B)H
-        int** p3 = strassenAlg(half_n, add2(half_n, 17, allocated_memory, C, D), E);                 //p3 = (C + D)E
-        int** p4 = strassenAlg(half_n, D, subtract2(half_n, 18, allocated_memory, G, E));         //p4 = D(G-E)
-        int** p5 = strassenAlg(half_n, add2(half_n, 19, allocated_memory, A, D), add2(half_n, 20, allocated_memory, E, H));       //p5 = (A + D)(E + H)  
-        int** p6 = strassenAlg(half_n, subtract2(half_n, 21, allocated_memory, B, D),  add2(half_n, 22, allocated_memory, G, H));   //p6 = (B - D)(G + H)
-        int** p7 = strassenAlg(half_n, subtract2(half_n, 23, allocated_memory, C, A), add2(half_n, 24, allocated_memory, E, F));    //p7 = (A - C)(E + F)
+        int** p1 = strassenAlg(half_n, A, subtract2(half_n, 8, allocated_memory, F, H));          //p1 = A(F - H)
+        int** p2 = strassenAlg(half_n, add2(half_n, 9, allocated_memory, A, B), H);                 //p2 = (A + B)H
+        int** p3 = strassenAlg(half_n, add2(half_n, 10, allocated_memory, C, D), E);                 //p3 = (C + D)E
+        int** p4 = strassenAlg(half_n, D, subtract2(half_n, 11, allocated_memory, G, E));         //p4 = D(G-E)
+        int** p5 = strassenAlg(half_n, add2(half_n, 12, allocated_memory, A, D), add2(half_n, 13, allocated_memory, E, H));       //p5 = (A + D)(E + H)  
+        int** p6 = strassenAlg(half_n, subtract2(half_n, 14, allocated_memory, B, D),  add2(half_n, 15, allocated_memory, G, H));   //p6 = (B - D)(G + H)
+        int** p7 = strassenAlg(half_n, subtract2(half_n, 16, allocated_memory, C, A), add2(half_n, 17, allocated_memory, E, F));    //p7 = (A - C)(E + F)
 
         // calculating submatrices of C           
-        int** AE_plus_BG = subtract2(half_n, 29, allocated_memory, add2(half_n, 30, allocated_memory, add2(half_n, 31, allocated_memory, p5, p4), p6), p2); 
-        int** AF_plus_BH = add2(half_n, 32, allocated_memory, p1, p2); 
-        int** CE_plus_DG = add2(half_n, 33, allocated_memory,p3, p4);  
-        int** CF_plus_DH = subtract2(half_n, 34, allocated_memory, add2(half_n, 35, allocated_memory, add2(half_n, 36, allocated_memory, p5, p1), p7), p3);
+        int** AE_plus_BG = subtract2(half_n, 18, allocated_memory, add2(half_n, 19, allocated_memory, add2(half_n, 20, allocated_memory, p5, p4), p6), p2); 
+        int** AF_plus_BH = add2(half_n, 21, allocated_memory, p1, p2); 
+        int** CE_plus_DG = add2(half_n, 22, allocated_memory,p3, p4);  
+        int** CF_plus_DH = subtract2(half_n, 23, allocated_memory, add2(half_n, 24, allocated_memory, add2(half_n, 25, allocated_memory, p5, p1), p7), p3);
 
         // Grouping the results obtained in a single matrix: 
         int** C1 = makeMatrix(n);
@@ -222,6 +219,13 @@ int** strassenAlg(int n, int** X, int** Y) {
 
         int** EvenX = makeMatrix2(EvenX, allocated_memory, (n+1), 0, matrix_size);
         int** EvenY = makeMatrix2(EvenX, allocated_memory, (n+1), 1, matrix_size);
+        
+        // DONT DELETE THIS, EVERYTHING FAILS WITHOUT IT
+        for (int i = 0; i < n+1; i++)
+          for (int j = 0; j < n+1; j++){
+             EvenX[i][j] = 0;
+             EvenY[i][j] = 0;
+        }
     
         for (int i = 0; i < n; i++){
          for (int j = 0; j < n; j++){
@@ -232,7 +236,8 @@ int** strassenAlg(int n, int** X, int** Y) {
         
         int** EvenC = strassenAlg(n+1,EvenX, EvenY);
 
-        int** C = makeMatrix(n);       
+        int** C = makeMatrix(n);
+          
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
                 C[i][j] = EvenC[i][j];
@@ -245,11 +250,12 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 100;
+    int n = 2;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(4*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
     int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++){
          A[i][j] = 1;
