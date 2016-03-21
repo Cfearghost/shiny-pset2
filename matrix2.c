@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 32
+#define CROSS_OVER 16
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
@@ -200,7 +200,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
 }
 
 int main(){
-    int n = 657;
+    int n = 100;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -215,6 +215,7 @@ int main(){
          C[i][j] = 0;
          D[i][j] = 0;
     }
+
 
     clock_t t = clock();
     strassenAlg(n, A, B, C, D);
