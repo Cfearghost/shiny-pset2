@@ -41,6 +41,16 @@ void add(int n, int** a, int** b, int** c)
       }
   }
 }
+void matrixProduct(int n, int** X, int** Y, int** C) { 
+  int i, j, sum, k;
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < n; j++) {
+      for (sum = 0., k = 0; k < n; k++)
+          sum += X[i][k] * Y[k][j];
+      C[i][j] = sum;
+    }
+  }
+}
 
 // Strassen Algorithm 
 void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
@@ -200,8 +210,10 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
     }
 }
 
-int main(){
-    int n = 1024;
+int main(int argc, char *argv[]){
+  int flag = atoi(argv[1]);
+  int n = atoi(argv[2]);
+  if(flag == 0){
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -226,6 +238,30 @@ int main(){
     printf("%f seconds \n", time); 
     free(allocated_memory);
     //printMatrixHeap(n, C);
-    return 0;
+  } 
+  else {
+    int matrix_size = n + n*n;
+    int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+    int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+    int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+    int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++){
+         A[i][j] = 1;
+         B[i][j] = 1;
+         C[i][j] = 0;
+    }
+
+    clock_t t = clock();
+    matrixProduct(n, A, B, C);
+    t = clock() - t; 
+    // Calculate the time 
+    float time = ((float)t)/CLOCKS_PER_SEC;
+    printf("%f seconds \n", time); 
+    free(allocated_memory);
+    //printMatrixHeap(n, C);
+  }
+  return 0;
 }
 

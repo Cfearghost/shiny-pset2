@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 32
+#define CROSS_OVER 512
 
 // Makes matrix on the heap
 int** makeMatrix(int n){
@@ -260,7 +260,7 @@ int** strassenAlg(int n, int** X, int** Y) {
 }
 
 int main(){
-    int n = 100;
+    int n = 45;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(4*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
