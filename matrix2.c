@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 1
+#define CROSS_OVER 32
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
@@ -53,7 +53,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
           }
         }
     }
-    else{
+    else if (n % 2 == 0) {
         // dimesnion of submatrices
         int half_n = n/2;
 
@@ -122,16 +122,6 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
                 b12[i][j] = Y[i][j + half_n];            // top right
                 b21[i][j] = Y[i + half_n][j];             // bottom left
                 b22[i][j] = Y[i + half_n][j + half_n];    // bottom right
-
-                c11[i][j] = C[i][j];                     // top left
-                c12[i][j] = C[i][j + half_n];            // top right
-                c21[i][j] = C[i + half_n][j];             // bottom left
-                c22[i][j] = C[i + half_n][j + half_n];    // bottom right
- 
-                d11[i][j] = D[i][j];                      // top left
-                d12[i][j] = D[i][j + half_n];            // top right
-                d21[i][j] = D[i + half_n][j];             // bottom left
-                d22[i][j] = D[i + half_n][j + half_n];    // bottom right
             }
         }
         sub(half_n, a12, a22, d11);
@@ -170,10 +160,47 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
         }
         free(allocated_memory);
     }
+    else {
+        int matrix_size = (n+1) + (n+1) * (n+1);
+
+        int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
+
+        int** EvenX = makeMatrix2(EvenX, allocated_memory, (n+1), 0, matrix_size);
+        int** EvenY = makeMatrix2(EvenY, allocated_memory, (n+1), 1, matrix_size);
+        int** EvenC = makeMatrix2(EvenC, allocated_memory, (n+1), 2, matrix_size);
+        int** EvenD = makeMatrix2(EvenD, allocated_memory, (n+1), 3, matrix_size);
+        
+        // DONT DELETE THIS, EVERYTHING FAILS WITHOUT IT
+        for (int i = 0; i < n+1; i++)
+          for (int j = 0; j < n+1; j++){
+             EvenX[i][j] = 0;
+             EvenY[i][j] = 0;
+             EvenC[i][j] = 0;
+             EvenD[i][j] = 0;
+        }
+    
+        for (int i = 0; i < n; i++){
+         for (int j = 0; j < n; j++){
+             EvenX[i][j] = X[i][j];
+             EvenY[i][j] = Y[i][j];
+             EvenC[i][j] = C[i][j];
+             EvenD[i][j] = D[i][j];
+         }
+        }    
+        
+        strassenAlg(n+1, EvenX, EvenY, EvenC, EvenD);
+          
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                C[i][j] = EvenC[i][j];
+            }
+        }
+        free(allocated_memory);
+    }
 }
 
 int main(){
-    int n = 1024;
+    int n = 453;
     int matrix_size = n + n*n;
     int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
     int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
@@ -187,7 +214,7 @@ int main(){
          B[i][j] = 1;
          C[i][j] = 0;
          D[i][j] = 0;
-      }
+    }
 
     clock_t t = clock();
     strassenAlg(n, A, B, C, D);
