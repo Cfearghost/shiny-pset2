@@ -55,14 +55,7 @@ void matrixProduct(int n, int** X, int** Y, int** C) {
 // Strassen Algorithm 
 void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
     if (n <= CROSS_OVER){
-        int i, j, sum, k;
-        for (i = 0; i < n; i++) {
-          for (j = 0; j < n; j++) {
-            for (sum = 0., k = 0; k < n; k++)
-                sum += X[i][k] * Y[k][j];
-            C[i][j] = sum;
-          }
-        }
+        matrixProduct(n, X, Y, C);
     }
     else if (n % 2 == 0) {
         // dimesnion of submatrices
