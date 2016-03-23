@@ -53,8 +53,8 @@ void matrixProduct(int n, int** X, int** Y, int** C) {
 }
 
 // Strassen Algorithm 
-void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
-    if (n <= CROSS_OVER){
+void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
+    if (n <= cs){
         matrixProduct(n, X, Y, C);
     }
     else if (n % 2 == 0) {
@@ -130,27 +130,27 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
         }
         sub(half_n, a12, a22, d11);
         add(half_n, b21, b22, d12);
-        strassenAlg(half_n, d11, d12, c11, d21);
+        strassenAlg(half_n, d11, d12, c11, d21, cs);
         sub(half_n, a21, a11, d11);
         add(half_n, b11, b12, d12);
-        strassenAlg(half_n, d11, d12, c22, d21);
+        strassenAlg(half_n, d11, d12, c22, d21, cs);
         add(half_n, a11, a12, d11);
-        strassenAlg(half_n, d11, b22, c12, d12);
+        strassenAlg(half_n, d11, b22, c12, d12, cs);
         sub(half_n, c11, c12, c11);
         sub(half_n, b21, b11, d11);
-        strassenAlg(half_n, a22, d11, c21, d12);
+        strassenAlg(half_n, a22, d11, c21, d12, cs);
         add(half_n, c21, c11, c11);
         sub(half_n, b12, b22, d11);
-        strassenAlg(half_n, a11, d11, d12, d21);
+        strassenAlg(half_n, a11, d11, d12, d21, cs);
         add(half_n, d12, c12, c12);
         add(half_n, d12, c22, c22);
         add(half_n, a21, a22, d11);
-        strassenAlg(half_n, d11, b11, d12, d21);
+        strassenAlg(half_n, d11, b11, d12, d21, cs);
         add(half_n, d12, c21, c21);
         sub(half_n, c22, d12, c22);
         add(half_n, a11, a22, d11);
         add(half_n, b11, b22, d12);
-        strassenAlg(half_n, d11, d12, d21, d22);
+        strassenAlg(half_n, d11, d12, d21, d22, cs);
         add(half_n, d21, c11, c11);
         add(half_n, d21, c22, c22);
 
@@ -192,7 +192,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
          }
         }    
         
-        strassenAlg(n+1, EvenX, EvenY, EvenC, EvenD);
+        strassenAlg(n+1, EvenX, EvenY, EvenC, EvenD, cs);
           
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
@@ -206,55 +206,73 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
 int main(int argc, char *argv[]){
   int flag = atoi(argv[1]);
   int n = atoi(argv[2]);
-  if(flag == 0){
-    int matrix_size = n + n*n;
-    int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
-    int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
-    int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
-    int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
-    int** D = makeMatrix2(B, allocated_memory, n, 3, matrix_size);
+  int cross = atoi(argv[3]);
+  float array[cross];
+  int count = 0;
+  while(count < cross){
+      if(flag == 0){
+        int matrix_size = n + n*n;
+        int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
+        int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+        int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+        int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+        int** D = makeMatrix2(B, allocated_memory, n, 3, matrix_size);
 
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++){
-         A[i][j] = 1;
-         B[i][j] = 1;
-         C[i][j] = 0;
-         D[i][j] = 0;
-    }
+        for (int i = 0; i < n; i++){
+              for (int j = 0; j < n; j++){
+                 A[i][j] = 1;
+                 B[i][j] = 1;
+                 C[i][j] = 0;
+                 D[i][j] = 0;
+              }
+        }
+        
+        clock_t t = clock();
+        // cs as cross-over
+        strassenAlg(n, A, B, C, D, cross);
+        t = clock() - t; 
+        // Calculate the time 
+        float time = ((float)t)/CLOCKS_PER_SEC;
+        array[count] = time;
+        printf("%f \n", time); 
+        free(allocated_memory);
+        //printMatrixHeap(n, C);
+      } 
+      else {
+        int matrix_size = n + n*n;
+        int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+        int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+        int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+        int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
 
-    // Make a print function that takes in the
-    clock_t t = clock();
-    strassenAlg(n, A, B, C, D);
-    t = clock() - t; 
-    // Calculate the time 
-    float time = ((float)t)/CLOCKS_PER_SEC;
-    printf("%f seconds \n", time); 
-    free(allocated_memory);
-    //printMatrixHeap(n, C);
-  } 
-  else {
-    int matrix_size = n + n*n;
-    int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
-    int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
-    int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
-    int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+        for (int i = 0; i < n; i++)
+          for (int j = 0; j < n; j++){
+             A[i][j] = 1;
+             B[i][j] = 1;
+             C[i][j] = 0;
+        }
 
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++){
-         A[i][j] = 1;
-         B[i][j] = 1;
-         C[i][j] = 0;
-    }
-
-    clock_t t = clock();
-    matrixProduct(n, A, B, C);
-    t = clock() - t; 
-    // Calculate the time 
-    float time = ((float)t)/CLOCKS_PER_SEC;
-    printf("%f seconds \n", time); 
-    free(allocated_memory);
-    //printMatrixHeap(n, C);
-  }
+        clock_t t = clock();
+        matrixProduct(n, A, B, C);
+        t = clock() - t; 
+        // Calculate the time 
+        float time = ((float)t)/CLOCKS_PER_SEC;
+        array[count] = time;
+        printf("%f \n", time); 
+        free(allocated_memory);
+        printMatrixHeap(n, C);
+      }
+      count++;
+   }
+   int index = 0;
+   float storage = 9999;
+      for (int i = 0; i < cross; i++){
+          if (array[i] < storage){
+              storage = array[i];
+              index = i;
+          } 
+      }
+  printf("%i\n", index);
   return 0;
 }
 
