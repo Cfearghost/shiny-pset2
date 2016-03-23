@@ -209,7 +209,7 @@ int main(int argc, char *argv[]){
   int cross = atoi(argv[3]);
   float array[cross];
   int count = 0;
-  while(count < cross){
+  while(count <= cross){
       if(flag == 0){
         int matrix_size = n + n*n;
         int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
@@ -229,7 +229,7 @@ int main(int argc, char *argv[]){
         
         clock_t t = clock();
         // cs as cross-over
-        strassenAlg(n, A, B, C, D, cross);
+        strassenAlg(n, A, B, C, D, count);
         t = clock() - t; 
         // Calculate the time 
         float time = ((float)t)/CLOCKS_PER_SEC;
