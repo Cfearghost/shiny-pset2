@@ -209,59 +209,69 @@ int main(int argc, char *argv[]){
   int cross = atoi(argv[3]);
   float array[cross];
   int count = 1;
+  int counter;
+  float total_time = 0;
   while(count <= cross){
-      if(flag == 0){
-        int matrix_size = n + n*n;
-        int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
-        int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
-        int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
-        int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
-        int** D = makeMatrix2(B, allocated_memory, n, 3, matrix_size);
+      counter = 0;
+      total_time = 0;
+      while (counter < 5){
+          if(flag == 0){
+          
+            int matrix_size = n + n*n;
+            int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
+            int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+            int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+            int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+            int** D = makeMatrix2(B, allocated_memory, n, 3, matrix_size);
 
-        for (int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++){
+                  for (int j = 0; j < n; j++){
+                     A[i][j] = 1;
+                     B[i][j] = 1;
+                     C[i][j] = 0;
+                     D[i][j] = 0;
+                  }
+            }
+            
+            clock_t t = clock();
+            // cs as cross-over
+            strassenAlg(n, A, B, C, D, count);
+            t = clock() - t; 
+            // Calculate the time 
+            float time = ((float)t)/CLOCKS_PER_SEC;
+            array[count] = time;
+            printf("%f \n", time); 
+            free(allocated_memory);
+            //printMatrixHeap(n, C);
+          } 
+          else {
+            int matrix_size = n + n*n;
+            int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+            int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+            int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+            int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+
+            for (int i = 0; i < n; i++)
               for (int j = 0; j < n; j++){
                  A[i][j] = 1;
                  B[i][j] = 1;
                  C[i][j] = 0;
-                 D[i][j] = 0;
-              }
-        }
-        
-        clock_t t = clock();
-        // cs as cross-over
-        strassenAlg(n, A, B, C, D, count);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        array[count] = time;
-        printf("%f \n", time); 
-        free(allocated_memory);
-        //printMatrixHeap(n, C);
-      } 
-      else {
-        int matrix_size = n + n*n;
-        int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
-        int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
-        int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
-        int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+            }
 
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-             C[i][j] = 0;
-        }
+            clock_t t = clock();
+            matrixProduct(n, A, B, C);
+            t = clock() - t; 
+            // Calculate the time 
+            float time = ((float)t)/CLOCKS_PER_SEC;
+            array[count] = time;
+            printf("%f \n", time); 
+            free(allocated_memory);
+            printMatrixHeap(n, C);
 
-        clock_t t = clock();
-        matrixProduct(n, A, B, C);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        array[count] = time;
-        printf("%f \n", time); 
-        free(allocated_memory);
-        printMatrixHeap(n, C);
+          }
+          counter++
       }
+      printf("%f \n", time/5); 
       count++;
    }
    /*int index = 0;
