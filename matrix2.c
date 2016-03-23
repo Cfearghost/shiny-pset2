@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 32
+#define CROSS_OVER 16
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
