@@ -208,7 +208,7 @@ int main(int argc, char *argv[]){
   int n = atoi(argv[2]);
   int cross = atoi(argv[3]);
   float array[cross];
-  int count = 0;
+  int count = 1;
   while(count <= cross){
       if(flag == 0){
         int matrix_size = n + n*n;
@@ -264,7 +264,7 @@ int main(int argc, char *argv[]){
       }
       count++;
    }
-   int index = 0;
+   /*int index = 0;
    float storage = 9999;
       for (int i = 0; i < cross; i++){
           if (array[i] < storage){
@@ -272,7 +272,7 @@ int main(int argc, char *argv[]){
               index = i;
           } 
       }
-  printf("%i\n", index);
+  printf("%i\n", index);*/
   return 0;
 }
 
