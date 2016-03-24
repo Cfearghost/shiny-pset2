@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define CROSS_OVER 32
+#define CROSS_OVER 16
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
@@ -230,7 +230,7 @@ int main(int argc, char *argv[]){
     float time = ((float)t)/CLOCKS_PER_SEC;
     printf("%f seconds \n", time); 
     free(allocated_memory);
-    //printMatrixHeap(n, C);
+    printMatrixHeap(n, C);
   } 
   else {
     int matrix_size = n + n*n;

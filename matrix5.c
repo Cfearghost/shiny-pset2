@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 
-#define CROSS_OVER 
+#define CROSS_OVER 16
 
 int** makeMatrix2(int** matrix, int** alloc, int n, int id, int matrix_size){
     matrix = (int**) (alloc + id*matrix_size);
@@ -53,8 +54,8 @@ void matrixProduct(int n, int** X, int** Y, int** C) {
 }
 
 // Strassen Algorithm 
-void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
-    if (n <= cs){
+void strassenAlg(int n, int** X, int** Y, int** C, int** D) {
+    if (n <= CROSS_OVER){
         matrixProduct(n, X, Y, C);
     }
     else if (n % 2 == 0) {
@@ -128,30 +129,29 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
                 b22[i][j] = Y[i + half_n][j + half_n];    // bottom right
             }
         }
-
         sub(half_n, a12, a22, d11);
         add(half_n, b21, b22, d12);
-        strassenAlg(half_n, d11, d12, c11, d21, cs);
+        strassenAlg(half_n, d11, d12, c11, d21);
         sub(half_n, a21, a11, d11);
         add(half_n, b11, b12, d12);
-        strassenAlg(half_n, d11, d12, c22, d21, cs);
+        strassenAlg(half_n, d11, d12, c22, d21);
         add(half_n, a11, a12, d11);
-        strassenAlg(half_n, d11, b22, c12, d12, cs);
+        strassenAlg(half_n, d11, b22, c12, d12);
         sub(half_n, c11, c12, c11);
         sub(half_n, b21, b11, d11);
-        strassenAlg(half_n, a22, d11, c21, d12, cs);
+        strassenAlg(half_n, a22, d11, c21, d12);
         add(half_n, c21, c11, c11);
         sub(half_n, b12, b22, d11);
-        strassenAlg(half_n, a11, d11, d12, d21, cs);
+        strassenAlg(half_n, a11, d11, d12, d21);
         add(half_n, d12, c12, c12);
         add(half_n, d12, c22, c22);
         add(half_n, a21, a22, d11);
-        strassenAlg(half_n, d11, b11, d12, d21, cs);
+        strassenAlg(half_n, d11, b11, d12, d21);
         add(half_n, d12, c21, c21);
         sub(half_n, c22, d12, c22);
         add(half_n, a11, a22, d11);
         add(half_n, b11, b22, d12);
-        strassenAlg(half_n, d11, d12, d21, d22, cs);
+        strassenAlg(half_n, d11, d12, d21, d22);
         add(half_n, d21, c11, c11);
         add(half_n, d21, c22, c22);
 
@@ -163,7 +163,6 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
                 C[i + half_n][j + half_n] = c22[i][j];    // bottom right
             }
         }
-
         free(allocated_memory);
     }
     else {
@@ -194,7 +193,7 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
          }
         }    
         
-        strassenAlg(n+1, EvenX, EvenY, EvenC, EvenD, cs);
+        strassenAlg(n+1, EvenX, EvenY, EvenC, EvenD);
           
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
@@ -208,20 +207,23 @@ void strassenAlg(int n, int** X, int** Y, int** C, int** D, int cs) {
 int main(int argc, char *argv[]){
   int flag = atoi(argv[1]);
   int n = atoi(argv[2]);
-  int cross = atoi(argv[3]);
-  float array[cross];
-  int count = 5;
-  int count_duplicate = 5;
-  int indexer = 0;
-  while (cross <= 1024) {
-    while(count > 0){
-      if(flag == 0){
-        int matrix_size = n + n*n;
+  if(flag == 0){
+    int matrix_size = n + n*n;
         int** allocated_memory = (int**) malloc(8*matrix_size * sizeof(int));
         int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
         int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
         int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
         int** D = makeMatrix2(B, allocated_memory, n, 3, matrix_size);
+
+        int near_cp = ceil(log(n/CROSS_OVER)/log(2));
+        int new_n = (2^near_cp) * CROSS_OVER;
+        int nmat_size = new_n + new_n*new_n;
+        int** allocated_memory2 = (int**) malloc(8*nmat_size * sizeof(int));
+
+        int** EvenA = makeMatrix2(EvenA, allocated_memory2, (new_n), 0, nmat_size);
+        int** EvenB = makeMatrix2(EvenB, allocated_memory2, (new_n), 1, nmat_size);
+        int** EvenC = makeMatrix2(EvenC, allocated_memory2, (new_n), 2, nmat_size);
+        int** EvenD = makeMatrix2(EvenD, allocated_memory2, (new_n), 3, nmat_size);
 
         for (int i = 0; i < n; i++){
               for (int j = 0; j < n; j++){
@@ -232,53 +234,53 @@ int main(int argc, char *argv[]){
               }
         }
         
+        for (int i = 0; i < n; i++){
+         for (int j = 0; j < n; j++){
+             EvenA[i][j] = A[i][j];
+             EvenB[i][j] = B[i][j];
+             EvenC[i][j] = C[i][j];
+             EvenD[i][j] = D[i][j];
+         }
+        }   
+
         clock_t t = clock();
         // cs as cross-over
-        strassenAlg(n, A, B, C, D, cross);
-        t = clock() - t; 
-        // Calculate the time 
-        float time = ((float)t)/CLOCKS_PER_SEC;
-        array[indexer] = time;
-        //printf("%f \n", time); 
-        free(allocated_memory);
-        //printMatrixHeap(n, C);
-      } 
-      else {
-        int matrix_size = n + n*n;
-        int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
-        int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
-        int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
-        int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
-
-        for (int i = 0; i < n; i++)
-          for (int j = 0; j < n; j++){
-             A[i][j] = 1;
-             B[i][j] = 1;
-             C[i][j] = 0;
+        strassenAlg(n, EvenA, EvenB, EvenC, EvenD);
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                C[i][j] = EvenC[i][j];
+            }
         }
-
-        clock_t t = clock();
-        matrixProduct(n, A, B, C);
         t = clock() - t; 
         // Calculate the time 
         float time = ((float)t)/CLOCKS_PER_SEC;
-        array[count] = time;
+        printMatrixHeap(n, C);
         printf("%f \n", time); 
         free(allocated_memory);
-        printMatrixHeap(n, C);
-      }
-      count--;
-      indexer++; 
-   }
-   float sum = 0;
-      for (int i = 0; i < count_duplicate; i++){
-          sum = sum + array[i];
-      }
-    float average = sum/5.0;
-    printf("%f\n", average);
-    count = 5;
-    indexer = 0;
-    cross = cross * 2;
+        free(allocated_memory2);
+  } 
+  else {
+    int matrix_size = n + n*n;
+    int** allocated_memory = (int**) malloc(6*matrix_size * sizeof(int));
+    int** A = makeMatrix2(A, allocated_memory, n, 0, matrix_size);
+    int** B = makeMatrix2(B, allocated_memory, n, 1, matrix_size);
+    int** C = makeMatrix2(A, allocated_memory, n, 2, matrix_size);
+
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++){
+         A[i][j] = 1;
+         B[i][j] = 1;
+         C[i][j] = 0;
+    }
+
+    clock_t t = clock();
+    matrixProduct(n, A, B, C);
+    t = clock() - t; 
+    // Calculate the time 
+    float time = ((float)t)/CLOCKS_PER_SEC;
+    printf("%f seconds \n", time); 
+    free(allocated_memory);
+    printMatrixHeap(n, C);
   }
   return 0;
 }
